@@ -1,0 +1,16 @@
+INFO  17:26:15,914 - Compiling source file: D:\GitKraken\Compiler Construction 1\Compiler Construction 1\test\program.mj
+INFO  17:26:15,921 - #1 program
+INFO  17:26:15,921 - #4 MJProgram
+INFO  17:26:15,921 - #4 int
+INFO  17:26:15,921 - #4 x
+INFO  17:26:15,921 - #8 ,
+INFO  17:26:15,921 - #4 y
+INFO  17:26:15,921 - #9 ;
+INFO  17:26:15,921 - #12 {
+INFO  17:26:15,921 - #15 void
+INFO  17:26:15,921 - #4 main
+INFO  17:26:15,921 - #10 (
+INFO  17:26:15,921 - #11 )
+INFO  17:26:15,921 - #12 {
+INFO  17:26:15,921 - #13 }
+INFO  17:26:15,921 - #13 }
