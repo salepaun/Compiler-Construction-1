@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.pp1.pa140306d;
+package rs.ac.bg.etf.pp1;
 
 import java_cup.runtime.Symbol;
 
@@ -37,6 +37,7 @@ WhiteSpace      = {LineTerminator} | [ \t\f\b]
 
 
 "program"   { return new_symbol(sym.PROG, yytext()); }
+"const"  	{ return new_symbol(sym.CONST, yytext()); }
 "break"   	{ return new_symbol(sym.BREAK, yytext()); }
 "class"   	{ return new_symbol(sym.CLASS, yytext()); }
 "else"   	{ return new_symbol(sym.ELSE, yytext()); }
@@ -54,10 +55,10 @@ WhiteSpace      = {LineTerminator} | [ \t\f\b]
 
 "+"   		{ return new_symbol(sym.PLUS, yytext()); }
 "-"   		{ return new_symbol(sym.MINUS, yytext()); }
-"*"   		{ return new_symbol(sym.MULTIPLICATION, yytext()); }
-"/"   		{ return new_symbol(sym.DIVISION, yytext()); }
-"%"   		{ return new_symbol(sym.MODUO, yytext()); }
-"=="   		{ return new_symbol(sym.EQUALITY, yytext()); }
+"*"   		{ return new_symbol(sym.MUL, yytext()); }
+"/"   		{ return new_symbol(sym.DIV, yytext()); }
+"%"   		{ return new_symbol(sym.MOD, yytext()); }
+"=="   		{ return new_symbol(sym.IS_EQUAL, yytext()); }
 "!="   		{ return new_symbol(sym.NOT_EQUAL, yytext()); }
 ">"   		{ return new_symbol(sym.GREATER, yytext()); }
 ">="   		{ return new_symbol(sym.GREATER_OR_EQUAL, yytext()); }
@@ -66,29 +67,29 @@ WhiteSpace      = {LineTerminator} | [ \t\f\b]
 "&&"   		{ return new_symbol(sym.LOGICAL_AND, yytext()); }
 "||"   		{ return new_symbol(sym.LOGICAL_OR, yytext()); }
 "="   		{ return new_symbol(sym.EQUAL, yytext()); }
-"++"   		{ return new_symbol(sym.INCREMENT, yytext()); }
-"--"   		{ return new_symbol(sym.DECREMENT, yytext()); }
+"++"   		{ return new_symbol(sym.INC, yytext()); }
+"--"   		{ return new_symbol(sym.DEC, yytext()); }
 ";"   		{ return new_symbol(sym.SEMI, yytext()); }
 ","   		{ return new_symbol(sym.COMMA, yytext()); }
 "."   		{ return new_symbol(sym.DOT, yytext()); }
-"("   		{ return new_symbol(sym.LPARENT, yytext()); }
-")"   		{ return new_symbol(sym.RPARENT, yytext()); }
+"("   		{ return new_symbol(sym.LPAREN, yytext()); }
+")"   		{ return new_symbol(sym.RPAREN, yytext()); }
 "["   		{ return new_symbol(sym.LBRACKET, yytext()); }
 "]"   		{ return new_symbol(sym.RBRACKET, yytext()); }
-"{"   		{ return new_symbol(sym.LBRACES, yytext()); }
-"}"   		{ return new_symbol(sym.RBRACES, yytext()); }
+"{"   		{ return new_symbol(sym.LBRACE, yytext()); }
+"}"   		{ return new_symbol(sym.RBRACE, yytext()); }
 
 
 "//" 		     { yybegin(COMMENT); }
 <COMMENT> .      { yybegin(COMMENT); }
 <COMMENT> "\r\n" { yybegin(YYINITIAL); }
 
-[0-9]+  { return new_symbol(sym.NUM_CONST, new Integer (yytext())); }
-("true" | "false") { if (yytext().equals("true")) return new_symbol(sym.BOOL_CONST, true); return new_symbol(sym.BOOL_CONST, false);}
-\'([a-z]|[A-Z])\' { return new_symbol(sym.CHAR_CONST, new Character(yytext().charAt(1)));}
+[0-9]+  				{ return new_symbol(sym.NUM_CONST, new Integer (yytext())); }
+("true" | "false") 		{ if (yytext().equals("true")) return new_symbol(sym.BOOL_CONST, true); return new_symbol(sym.BOOL_CONST, false);}
+\'([a-z]|[A-Z])\' 		{ return new_symbol(sym.CHAR_CONST, new Character(yytext().charAt(1)));}
 
 
-([a-z]|[A-Z])[a-z|A-Z|0-9|_]* 	{return new_symbol (sym.IDENT, yytext()); }
+([a-z]|[A-Z])[a-z|A-Z|0-9|_]* 	{ System.out.println("ident: " + yytext());  return new_symbol (sym.IDENT, yytext()); }
 
 . { System.err.println("Leksicka greska ("+yytext()+") u liniji "+(yyline+1)); }
 

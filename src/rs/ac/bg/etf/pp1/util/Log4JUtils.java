@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.pp1.pa140306d.util;
+package rs.ac.bg.etf.pp1.util;
 
 import java.io.File;
 import java.net.URL;

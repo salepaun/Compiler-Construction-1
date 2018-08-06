@@ -1,0 +1,432 @@
+INFO  21:34:34,237 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  21:34:34,264 - #2 program
+INFO  21:34:34,265 - #15 MJProgram
+INFO  21:34:34,265 - #15 int
+INFO  21:34:34,266 - #15 x
+INFO  21:34:34,266 - #8 ,
+ERROR 21:34:34,266 - 
+Sintaksna greska
+ERROR 21:34:34,267 - Fatalna greska, parsiranje se ne moze nastaviti
+INFO  21:35:50,893 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  21:35:50,915 - #2 program
+INFO  21:35:50,916 - #15 MJProgram
+INFO  21:35:50,916 - #15 int
+INFO  21:35:50,916 - #15 x
+INFO  21:35:50,917 - #5 ;
+INFO  21:35:50,917 - #15 int
+INFO  21:35:50,917 - #15 y
+INFO  21:35:50,918 - #5 ;
+INFO  21:35:50,918 - #3 {
+INFO  21:35:50,918 - #13 void
+ERROR 21:35:50,918 - 
+Sintaksna greska
+ERROR 21:35:50,919 - Fatalna greska, parsiranje se ne moze nastaviti
+INFO  21:36:31,746 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  21:36:31,764 - #2 program
+INFO  21:36:31,765 - #15 MJProgram
+INFO  21:36:31,765 - #15 int
+INFO  21:36:31,765 - #15 x
+INFO  21:36:31,765 - #5 ;
+INFO  21:36:31,765 - #15 int
+INFO  21:36:31,766 - #15 y
+INFO  21:36:31,766 - #5 ;
+INFO  21:36:31,766 - #3 {
+INFO  21:36:31,766 - #15 int
+INFO  21:36:31,766 - #15 main
+INFO  21:36:31,766 - #6 (
+INFO  21:36:31,767 - #7 )
+INFO  21:36:31,767 - #3 {
+INFO  21:36:31,767 - #4 }
+INFO  21:36:31,767 - #4 }
+INFO  21:46:42,560 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  21:46:42,580 - #2 program
+INFO  21:46:42,580 - #15 MJProgram
+INFO  21:46:42,581 - #15 int
+INFO  21:46:42,581 - #15 x
+INFO  21:46:42,581 - #5 ;
+INFO  21:46:42,581 - #15 int
+INFO  21:46:42,581 - #15 y
+INFO  21:46:42,582 - #5 ;
+INFO  21:46:42,583 - #3 {
+INFO  21:46:42,583 - #15 int
+INFO  21:46:42,584 - #15 main
+INFO  21:46:42,584 - #6 (
+INFO  21:46:42,584 - #7 )
+INFO  21:46:42,585 - #3 {
+INFO  21:46:42,585 - #9 print
+INFO  21:46:42,585 - #6 (
+INFO  21:46:42,585 - #14 1
+INFO  21:46:42,585 - #7 )
+INFO  21:46:42,586 - #5 ;
+INFO  21:46:42,586 - #9 print
+INFO  21:46:42,586 - #6 (
+INFO  21:46:42,586 - #14 2
+INFO  21:46:42,586 - #7 )
+INFO  21:46:42,587 - #5 ;
+INFO  21:46:42,587 - #4 }
+INFO  21:46:42,587 - #4 }
+INFO  21:46:42,588 - Print calls = 2
+INFO  21:52:39,794 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  21:52:39,820 - #2 program
+INFO  21:52:39,820 - #15 MJProgram
+INFO  21:52:39,821 - #15 int
+INFO  21:52:39,821 - #15 x
+INFO  21:52:39,822 - #5 ;
+INFO  21:52:39,822 - #15 int
+INFO  21:52:39,822 - #15 y
+INFO  21:52:39,823 - #5 ;
+INFO  21:52:39,823 - #3 {
+INFO  21:52:39,824 - #15 int
+INFO  21:52:39,824 - #15 main
+INFO  21:52:39,824 - #6 (
+INFO  21:52:39,825 - #7 )
+INFO  21:52:39,825 - #3 {
+INFO  21:52:39,825 - #9 print
+INFO  21:52:39,826 - #6 (
+INFO  21:52:39,826 - #14 1
+INFO  21:52:39,826 - #7 )
+INFO  21:52:39,826 - #5 ;
+INFO  21:52:39,826 - #9 print
+INFO  21:52:39,827 - #6 (
+INFO  21:52:39,827 - #14 2
+INFO  21:52:39,827 - #7 )
+INFO  21:52:39,827 - #5 ;
+INFO  21:52:39,827 - #15 x
+INFO  21:52:39,828 - #12 =
+INFO  21:52:39,828 - #15 y
+INFO  21:52:39,828 - #11 +
+INFO  21:52:39,829 - #14 3
+INFO  21:52:39,829 - #11 +
+INFO  21:52:39,829 - #15 x
+INFO  21:52:39,829 - #5 ;
+INFO  21:52:39,829 - #4 }
+INFO  21:52:39,830 - #4 }
+INFO  21:52:39,830 - Print calls = 2
+INFO  21:52:57,785 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  21:52:57,807 - #2 program
+INFO  21:52:57,807 - #15 MJProgram
+INFO  21:52:57,808 - #15 int
+INFO  21:52:57,808 - #15 x
+INFO  21:52:57,809 - #5 ;
+INFO  21:52:57,809 - #15 int
+INFO  21:52:57,810 - #15 y
+INFO  21:52:57,810 - #5 ;
+INFO  21:52:57,811 - #3 {
+INFO  21:52:57,811 - #15 int
+INFO  21:52:57,811 - #15 main
+INFO  21:52:57,812 - #6 (
+INFO  21:52:57,812 - #7 )
+INFO  21:52:57,812 - #3 {
+INFO  21:52:57,812 - #9 print
+INFO  21:52:57,813 - #6 (
+INFO  21:52:57,813 - #14 1
+INFO  21:52:57,813 - #7 )
+INFO  21:52:57,813 - #5 ;
+INFO  21:52:57,814 - #9 print
+INFO  21:52:57,814 - #6 (
+INFO  21:52:57,814 - #14 2
+INFO  21:52:57,815 - #7 )
+INFO  21:52:57,815 - #5 ;
+INFO  21:52:57,815 - #15 x
+INFO  21:52:57,816 - #12 =
+INFO  21:52:57,816 - #15 y
+INFO  21:52:57,817 - #11 +
+INFO  21:52:57,817 - #14 3
+INFO  21:52:57,817 - #11 +
+INFO  21:52:57,818 - #5 ;
+ERROR 21:52:57,818 - 
+Sintaksna greska
+ERROR 21:52:57,818 - Fatalna greska, parsiranje se ne moze nastaviti
+INFO  21:52:57,819 - Print calls = 2
+INFO  21:53:42,205 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  21:53:42,224 - #2 program
+INFO  21:53:42,224 - #15 MJProgram
+INFO  21:53:42,224 - #15 int
+INFO  21:53:42,225 - #15 x
+INFO  21:53:42,225 - #5 ;
+INFO  21:53:42,225 - #15 int
+INFO  21:53:42,225 - #15 y
+INFO  21:53:42,225 - #5 ;
+INFO  21:53:42,225 - #3 {
+INFO  21:53:42,226 - #15 int
+INFO  21:53:42,226 - #15 main
+INFO  21:53:42,226 - #6 (
+INFO  21:53:42,226 - #7 )
+INFO  21:53:42,226 - #3 {
+INFO  21:53:42,226 - #9 print
+INFO  21:53:42,227 - #6 (
+INFO  21:53:42,227 - #14 1
+INFO  21:53:42,227 - #7 )
+INFO  21:53:42,227 - #5 ;
+INFO  21:53:42,227 - #15 x
+INFO  21:53:42,227 - #12 =
+INFO  21:53:42,228 - #15 y
+INFO  21:53:42,228 - #11 +
+INFO  21:53:42,228 - #14 3
+INFO  21:53:42,228 - #11 +
+INFO  21:53:42,228 - #5 ;
+ERROR 21:53:42,229 - 
+Sintaksna greska
+ERROR 21:53:42,229 - Fatalna greska, parsiranje se ne moze nastaviti
+INFO  21:53:42,229 - Print calls = 1
+INFO  21:55:26,793 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  21:55:26,812 - #2 program
+INFO  21:55:26,813 - #15 MJProgram
+INFO  21:55:26,813 - #15 int
+INFO  21:55:26,813 - #15 x
+INFO  21:55:26,813 - #5 ;
+INFO  21:55:26,813 - #15 int
+INFO  21:55:26,814 - #15 y
+INFO  21:55:26,814 - #5 ;
+INFO  21:55:26,814 - #3 {
+INFO  21:55:26,815 - #15 int
+INFO  21:55:26,815 - #15 main
+INFO  21:55:26,815 - #6 (
+INFO  21:55:26,815 - #7 )
+INFO  21:55:26,816 - #3 {
+INFO  21:55:26,816 - #9 print
+INFO  21:55:26,816 - #6 (
+INFO  21:55:26,816 - #14 1
+INFO  21:55:26,817 - #7 )
+INFO  21:55:26,817 - #5 ;
+INFO  21:55:26,817 - #15 x
+INFO  21:55:26,817 - #12 =
+INFO  21:55:26,817 - #15 y
+INFO  21:55:26,817 - #11 +
+INFO  21:55:26,818 - #14 3
+INFO  21:55:26,818 - #11 +
+INFO  21:55:26,818 - #5 ;
+ERROR 21:55:26,818 - 
+Sintaksna greska
+INFO  21:55:26,818 - #9 print
+INFO  21:55:26,819 - #6 (
+INFO  21:55:26,819 - #14 2
+INFO  21:55:26,821 - #7 )
+INFO  21:55:26,821 - #5 ;
+INFO  21:55:26,821 - #4 }
+INFO  21:55:26,821 - #4 }
+INFO  21:55:26,822 - Print calls = 2
+INFO  21:57:47,579 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  21:57:47,658 - #2 program
+INFO  21:57:47,658 - #15 MJProgram
+INFO  21:57:47,658 - #15 int
+INFO  21:57:47,659 - #15 x
+INFO  21:57:47,659 - #5 ;
+INFO  21:57:47,659 - #15 int
+INFO  21:57:47,660 - #15 y
+INFO  21:57:47,660 - #5 ;
+INFO  21:57:47,660 - #3 {
+INFO  21:57:47,660 - #15 int
+INFO  21:57:47,661 - #15 main
+INFO  21:57:47,661 - #6 (
+INFO  21:57:47,661 - #7 )
+INFO  21:57:47,661 - #3 {
+INFO  21:57:47,662 - #9 print
+INFO  21:57:47,662 - #6 (
+INFO  21:57:47,662 - #14 1
+INFO  21:57:47,662 - #7 )
+INFO  21:57:47,662 - #5 ;
+INFO  21:57:47,663 - #15 x
+INFO  21:57:47,663 - #12 =
+INFO  21:57:47,663 - #15 y
+INFO  21:57:47,663 - #11 +
+INFO  21:57:47,664 - #14 3
+INFO  21:57:47,664 - #11 +
+INFO  21:57:47,664 - #5 ;
+ERROR 21:58:22,156 - 
+Sintaksna greska
+INFO  21:58:22,158 - #9 print
+INFO  21:58:22,158 - #6 (
+INFO  21:58:22,158 - #14 2
+INFO  21:58:22,161 - #7 )
+INFO  21:58:22,161 - #5 ;
+INFO  21:58:22,161 - #4 }
+INFO  21:58:22,161 - #4 }
+INFO  21:58:22,162 - Print calls = 2
+INFO  21:59:31,866 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  21:59:31,907 - #2 program
+INFO  21:59:31,908 - #15 MJProgram
+INFO  21:59:31,908 - #15 int
+INFO  21:59:31,908 - #15 x
+INFO  21:59:31,908 - #5 ;
+INFO  21:59:31,909 - #15 int
+INFO  21:59:31,909 - #15 y
+INFO  21:59:31,909 - #5 ;
+INFO  21:59:31,909 - #3 {
+INFO  21:59:31,909 - #15 int
+INFO  21:59:31,909 - #15 main
+INFO  21:59:31,910 - #6 (
+INFO  21:59:31,910 - #7 )
+INFO  21:59:31,910 - #3 {
+INFO  21:59:31,910 - #9 print
+INFO  21:59:31,910 - #6 (
+INFO  21:59:31,911 - #14 1
+INFO  21:59:31,911 - #7 )
+INFO  21:59:31,911 - #5 ;
+INFO  21:59:31,911 - #15 x
+INFO  21:59:31,911 - #12 =
+INFO  21:59:31,912 - #15 y
+INFO  21:59:31,912 - #11 +
+INFO  21:59:31,912 - #14 3
+INFO  21:59:31,912 - #11 +
+INFO  21:59:31,912 - #5 ;
+ERROR 21:59:57,694 - 
+Sintaksna greska
+INFO  21:59:57,694 - #9 print
+INFO  21:59:57,695 - #6 (
+INFO  21:59:57,695 - #14 2
+INFO  21:59:57,698 - #7 )
+INFO  21:59:57,698 - #5 ;
+INFO  21:59:57,698 - #4 }
+INFO  21:59:57,698 - #4 }
+INFO  21:59:57,699 - Print calls = 2
+INFO  22:00:20,256 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  22:00:20,280 - #2 program
+INFO  22:00:20,280 - #15 MJProgram
+INFO  22:00:20,280 - #15 int
+INFO  22:00:20,281 - #15 x
+INFO  22:00:20,281 - #5 ;
+INFO  22:00:20,281 - #15 int
+INFO  22:00:20,281 - #15 y
+INFO  22:00:20,282 - #5 ;
+INFO  22:00:20,282 - #3 {
+INFO  22:00:20,282 - #15 int
+INFO  22:00:20,282 - #15 main
+INFO  22:00:20,283 - #6 (
+INFO  22:00:20,283 - #7 )
+INFO  22:00:20,283 - #3 {
+INFO  22:00:20,283 - #9 print
+INFO  22:00:20,283 - #6 (
+INFO  22:00:20,284 - #14 1
+INFO  22:00:20,284 - #7 )
+INFO  22:00:20,284 - #5 ;
+INFO  22:00:20,284 - #15 x
+INFO  22:00:20,285 - #12 =
+INFO  22:00:20,285 - #15 y
+INFO  22:00:20,285 - #11 +
+INFO  22:00:20,285 - #14 3
+INFO  22:00:20,286 - #11 +
+INFO  22:00:20,286 - #5 ;
+ERROR 22:00:20,286 - 
+Sintaksna greska na liniji 6
+INFO  22:00:20,286 - #9 print
+INFO  22:00:20,287 - #6 (
+INFO  22:00:20,287 - #14 2
+INFO  22:00:20,289 - #7 )
+INFO  22:00:20,289 - #5 ;
+INFO  22:00:20,289 - #4 }
+INFO  22:00:20,289 - #4 }
+INFO  22:00:20,290 - Print calls = 2
+INFO  22:02:15,527 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  22:02:15,553 - #2 program
+INFO  22:02:15,553 - #15 MJProgram
+INFO  22:02:15,553 - #15 int
+INFO  22:02:15,554 - #15 x
+INFO  22:02:15,554 - #5 ;
+INFO  22:02:15,554 - #15 int
+INFO  22:02:15,554 - #15 y
+INFO  22:02:15,555 - #5 ;
+INFO  22:02:15,555 - #3 {
+INFO  22:02:15,555 - #15 int
+INFO  22:02:15,555 - #15 main
+INFO  22:02:15,555 - #6 (
+INFO  22:02:15,555 - #7 )
+INFO  22:02:15,556 - #3 {
+INFO  22:02:15,556 - #9 print
+INFO  22:02:15,556 - #6 (
+INFO  22:02:15,556 - #14 1
+INFO  22:02:15,556 - #7 )
+INFO  22:02:15,556 - #5 ;
+INFO  22:02:15,557 - #15 x
+INFO  22:02:15,557 - #12 =
+INFO  22:02:15,557 - #15 y
+INFO  22:02:15,557 - #11 +
+INFO  22:02:15,557 - #14 3
+INFO  22:02:15,558 - #11 +
+INFO  22:02:15,558 - #5 ;
+ERROR 22:02:15,558 - 
+Sintaksna greska na liniji 6
+INFO  22:02:15,558 - #9 print
+INFO  22:02:15,558 - #6 (
+INFO  22:02:15,558 - #14 2
+DEBUG 22:02:15,561 - Uspesan oporavak od greske pri dodeli vrednosti.
+INFO  22:02:15,561 - #7 )
+INFO  22:02:15,561 - #5 ;
+INFO  22:02:15,561 - #4 }
+INFO  22:02:15,562 - #4 }
+INFO  22:02:15,562 - Print calls = 2
+INFO  22:03:07,819 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  22:03:07,838 - #2 program
+INFO  22:03:07,839 - #15 MJProgram
+INFO  22:03:07,839 - #15 int
+INFO  22:03:07,839 - #15 x
+INFO  22:03:07,840 - #5 ;
+INFO  22:03:07,840 - #15 int
+INFO  22:03:07,840 - #15 y
+INFO  22:03:07,840 - #5 ;
+INFO  22:03:07,841 - #3 {
+INFO  22:03:07,841 - #15 int
+INFO  22:03:07,841 - #15 main
+INFO  22:03:07,841 - #6 (
+INFO  22:03:07,841 - #7 )
+INFO  22:03:07,842 - #3 {
+INFO  22:03:07,842 - #9 print
+INFO  22:03:07,842 - #6 (
+INFO  22:03:07,842 - #14 1
+INFO  22:03:07,842 - #7 )
+INFO  22:03:07,843 - #5 ;
+INFO  22:03:07,843 - #15 x
+INFO  22:03:07,843 - #12 =
+INFO  22:03:07,843 - #15 y
+INFO  22:03:07,843 - #11 +
+INFO  22:03:07,844 - #14 3
+INFO  22:03:07,844 - #11 +
+INFO  22:03:07,844 - #5 ;
+ERROR 22:03:07,845 - 
+Sintaksna greska na liniji 6
+INFO  22:03:07,845 - #9 print
+INFO  22:03:07,845 - #6 (
+INFO  22:03:07,845 - #14 2
+INFO  22:03:07,847 - #7 )
+INFO  22:03:07,848 - #5 ;
+INFO  22:03:07,848 - #4 }
+INFO  22:03:07,848 - #4 }
+INFO  22:03:07,848 - Print calls = 2
+INFO  22:22:43,227 - Compiling source file: C:\pp1domaci\workspace\MJCompiler\test\program.mj
+INFO  22:22:43,252 - #2 program
+INFO  22:22:43,253 - #15 MJProgram
+INFO  22:22:43,253 - #15 int
+INFO  22:22:43,253 - #15 x
+INFO  22:22:43,254 - #5 ;
+INFO  22:22:43,254 - #15 int
+INFO  22:22:43,254 - #15 y
+INFO  22:22:43,254 - #5 ;
+INFO  22:22:43,255 - #3 {
+INFO  22:22:43,255 - #15 int
+INFO  22:22:43,255 - #15 main
+INFO  22:22:43,255 - #6 (
+INFO  22:22:43,255 - #7 )
+INFO  22:22:43,256 - #3 {
+INFO  22:22:43,256 - #9 print
+INFO  22:22:43,256 - #6 (
+INFO  22:22:43,256 - #14 1
+INFO  22:22:43,257 - #7 )
+INFO  22:22:43,257 - #5 ;
+INFO  22:22:43,257 - #15 x
+INFO  22:22:43,257 - #12 =
+INFO  22:22:43,257 - #15 y
+INFO  22:22:43,258 - #11 +
+INFO  22:22:43,258 - #14 3
+INFO  22:22:43,258 - #11 +
+INFO  22:22:43,259 - #5 ;
+ERROR 22:22:43,259 - 
+Sintaksna greska na liniji 6
+INFO  22:22:43,259 - #9 print
+INFO  22:22:43,260 - #6 (
+INFO  22:22:43,260 - #14 2
+DEBUG 22:22:43,263 - Uspesan oporavak od greske pri dodeli vrednosti.
+INFO  22:22:43,263 - #7 )
+INFO  22:22:43,264 - #5 ;
+INFO  22:22:43,265 - #4 }
+INFO  22:22:43,265 - #4 }
+INFO  22:22:43,266 - Print calls = 2

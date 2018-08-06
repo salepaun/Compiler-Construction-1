@@ -1,4 +1,4 @@
-package rs.ac.bg.etf.pp1.pa140306d;
+package rs.ac.bg.etf.pp1;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,11 +7,11 @@ import java.io.IOException;
 import java.io.Reader;
 
 import java_cup.runtime.Symbol;
-import rs.ac.bg.etf.pp1.pa140306d.util.Log4JUtils;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.xml.DOMConfigurator;
 
+import rs.ac.bg.etf.pp1.util.Log4JUtils;
 
 public class MJTest {
 
@@ -25,7 +25,7 @@ public class MJTest {
 		Reader br = null;
 		try {
 			
-			File sourceCode = new File("test/program2.mj");	
+			File sourceCode = new File("test/program.mj");	
 			log.info("Compiling source file: " + sourceCode.getAbsolutePath());
 			
 			br = new BufferedReader(new FileReader(sourceCode));
@@ -33,12 +33,12 @@ public class MJTest {
 			Yylex lexer = new Yylex(br);
 			Symbol currToken = null;
 			while ((currToken = lexer.next_token()).sym != sym.EOF) {
-				if (currToken != null)
+				if (currToken != null && currToken.value != null)
 					log.info(currToken.toString() + " " + currToken.value.toString());
 			}
 		} 
 		finally {
-			if (br != null) try { br.close(); } catch (IOException e1) { e1.printStackTrace(); }
+			if (br != null) try { br.close(); } catch (IOException e1) { log.error(e1.getMessage(), e1); }
 		}
 	}
 	
