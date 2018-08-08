@@ -5,7 +5,7 @@ program test301
 	const int jedan = 1, pet = 5;
 
 	int niz[];
-	
+
 	char nizch[];
 	
 {

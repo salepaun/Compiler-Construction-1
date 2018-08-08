@@ -12,6 +12,12 @@ parser code {:
 	
 	int printCallCount = 0;
 	boolean errorDetected = false;
+
+	Struct boolType;
+
+	int globalConstCount = 0;
+	int globalVarCount = 0;
+
 	
 	Logger log = Logger.getLogger(getClass());
    
@@ -57,12 +63,29 @@ scan with {:
 
 init with {:
 	Tab.init(); // Universe scope
+	boolType = new Struct(Struct.Bool);
+	Obj boolObj = new Obj(Obj.Type, "bool", boolType);
+	Tab.currentScope().addToLocals(boolObj);
 :}
 
 action code {:
+	boolean globalScope = false;
+	boolean constDecl = false;
+
 	Obj currentMethod = null;
 	boolean returnFound = false;
 	Struct currentType = null;
+	Struct listDeclType = Tab.nullType;
+
+	boolean isFirstDeclaration(String name, int line)
+	{
+		if(Tab.currentScope.findSymbol(name)==null)
+			return true;
+		else {
+			parser.report_error("Greska na liniji " + line + " - promenljiva " + name + " je vec deklarisana");
+			return false;
+		}
+	}
 :}
 
 terminal PROG;
@@ -94,12 +117,12 @@ non terminal Condition, CondTermList, CondTerm, CondFactList, CondFact;
 non terminal Obj ProgName, Designator;
 non terminal Struct Type, Term, Expr, Factor;
 
-Program ::= PROG ProgName:p ProgDeclList LBRACE MethodDeclList RBRACE 
+Program ::= PROG ProgName:p ProgDeclList {: globalScope = false; :} LBRACE MethodDeclList RBRACE 
 {:
 	Code.dataSize = Tab.currentScope().getnVars();
-	
 	Tab.chainLocalSymbols(p);
 	Tab.closeScope(); 
+	globalScope = true;
 :}
 ;
 
@@ -124,17 +147,48 @@ ProgDecl ::= ConstDecl
 
 ConstDecl ::= CONST Type:type IDENT:name
               {:
-				parser.report_info("Deklarisana konstanta "+ name+" na liniji "+ nameleft, null);
-				Obj temp = Tab.find(name);
-				
-				Tab.insert(Obj.Con, name, type);  
-                currentType = type;
+			  		constDecl = true;
+					currentType = type;
+					if(isFirstDeclaration(name, nameleft) && listDeclType != Tab.nullType)
+					{	
+						Obj temp = Tab.insert(Obj.Con, name, type);
+						parser.report_info("Deklarisana konstanta "+ name+" na liniji "+ nameleft, null);
+					}
               :}
-              EQUAL ConstValue ConstAssigment {: currentType = null; :} SEMI;
+              EQUAL ConstValue:cType {: /* provera tipa */ :} ConstAssigment {: currentType = null; constDecl = false; :} SEMI;
 
-ConstValue ::= NUM_CONST | CHAR_CONST | BOOL_CONST;
+ConstValue ::= NUM_CONST:i 
+			   {:
+			   		if(constDecl && globalScope)
+						parser.globalConstCount++; 
+					RESULT = new Obj(Obj.Con, "numValue", Tab.intType, i, 0);
+			   :}
+			   |
+			   CHAR_CONST:c 
+			   {:
+			   		if(constDecl && globalScope)
+						parser.globalConstCount++;
+					RESULT = new Obj(Obj.Con, "charValue", Tab.charType, c, 0);
+			   :}
+			   |
+			   BOOL_CONST:b
+			   {:
+			   		if(constDecl && globalScope)
+						parser.globalConstCount++;
+					RESULT = new Obj(Obj.Con, "boolValue", Tab.find("bool").getType(), b?1:0, 0);
+			   :}
+			   ;
 
-ConstAssigment ::= COMMA IDENT:n {: parser.report_info("Deklarisana konstanta "+ n + " na liniji "+ nleft, null); Tab.insert(Obj.Con, n, currentType);   :} EQUAL ConstValue ConstAssigment 
+ConstAssigment ::= ConstAssigment COMMA IDENT:n 
+				   {:
+				    	if(isFirstDeclaration(name, nameleft) && listDeclType != Tab.nullType)
+						{	
+							Obj temp = Tab.insert(Obj.Con, n, currentType);
+							parser.report_info("Deklarisana konstanta "+ name+" na liniji "+ nameleft, null);
+						}
+				   :}
+						
+				   EQUAL ConstValue 
 				   |
 				   /* epsilon */
 				   ;
@@ -148,8 +202,10 @@ VarDecl ::= Type:varType IDENT:varName ArrayBrackets
 			{:
 				parser.report_info("Deklarisana promenljiva "+ varName+" na liniji "+ varNameleft, null);
 				Obj temp = Tab.find(varName);
-				
-				Tab.insert(Obj.Var, varName, varType);  
+				if(temp == Tab.noObj)
+					parser.report_error("Promenljiva " + varType + " je vec bila deklarisana. Linija: " + varNameleft);
+				else
+					Tab.insert(Obj.Var, varName, varType);  
 			:}
 			VarAdditional SEMI
 			; 
