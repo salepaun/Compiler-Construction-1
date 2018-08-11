@@ -12,6 +12,7 @@ parser code {:
 	
 	int printCallCount = 0;
 	boolean errorDetected = false;
+	boolean isArrayType = false;
 
 	Struct boolType;
 
@@ -71,9 +72,9 @@ init with {:
 action code {:
 	boolean globalScope = false;
 	boolean constDecl = false;
-
-	Obj currentMethod = null;
 	boolean returnFound = false;
+	Obj currentMethod = null;
+	Obj currentClass = null;
 	Struct currentType = null;
 	Struct listDeclType = Tab.nullType;
 
@@ -82,7 +83,7 @@ action code {:
 		if(Tab.currentScope.findSymbol(name)==null)
 			return true;
 		else {
-			parser.report_error("Greska na liniji " + line + " - promenljiva " + name + " je vec deklarisana");
+			parser.report_error("Greska na liniji " + line + " - promenljiva " + name + " je vec deklarisana", null);
 			return false;
 		}
 	}
@@ -105,7 +106,7 @@ non terminal Program, ProgDeclList, ProgDecl;
 non terminal VarDeclList, VarDecl, VarAdditional;
 non terminal ClassDecl, ExtendsDecl, ClassMethodDeclList;
 non terminal ArrayBrackets;
-non terminal MethodDeclList, MethodDecl;
+non terminal MethodDeclList, MethodDecl, MethType;
 non terminal ConstDecl, ConstAssigment, ConstValue;
 non terminal FormalParamList, FormalParamDecl, FormPars, ActualPars, ActualParamList; 
 non terminal StatementList, Statement, Addop, Mulop, Relop;
@@ -155,13 +156,14 @@ ConstDecl ::= CONST Type:type IDENT:name
 						parser.report_info("Deklarisana konstanta "+ name+" na liniji "+ nameleft, null);
 					}
               :}
-              EQUAL ConstValue:cType {: /* provera tipa */ :} ConstAssigment {: currentType = null; constDecl = false; :} SEMI;
+              EQUAL ConstValue ConstAssigment {: currentType = null; constDecl = false; :} SEMI;
 
 ConstValue ::= NUM_CONST:i 
 			   {:
 			   		if(constDecl && globalScope)
 						parser.globalConstCount++; 
 					RESULT = new Obj(Obj.Con, "numValue", Tab.intType, i, 0);
+					// provera tipa
 			   :}
 			   |
 			   CHAR_CONST:c 
@@ -200,36 +202,98 @@ VarDeclList ::= VarDeclList VarDecl
 
 VarDecl ::= Type:varType IDENT:varName ArrayBrackets
 			{:
-				parser.report_info("Deklarisana promenljiva "+ varName+" na liniji "+ varNameleft, null);
-				Obj temp = Tab.find(varName);
-				if(temp == Tab.noObj)
-					parser.report_error("Promenljiva " + varType + " je vec bila deklarisana. Linija: " + varNameleft);
-				else
-					Tab.insert(Obj.Var, varName, varType);  
+				currentType = varType;
+				if(isFirstDeclaration(varName, varNameleft)){
+					Obj temp = Tab.find(varName);
+					if(temp == Tab.noObj)
+						parser.report_error("Promenljiva " + varType + " je vec bila deklarisana. Linija: " + varNameleft, null);
+					else
+					{
+						Struct type = varType;
+						
+						if(isArrayType)
+							type = new Struct(Struct.Array, varType);
+						if(currentClass!=null){
+							Tab.insert(Obj.Fld, varName, varType);
+							parser.report_info("Deklarisano polje klase " + currentClass.getName() ":"+ varName+ " na liniji "+ varNameleft, null);
+						} else {
+							Tab.insert(Obj.Var, varName, varType);
+							parser.report_info("Deklarisana promenljiva "+ varName+ " na liniji "+ varNameleft, null);
+						}
+					}
+				}
 			:}
-			VarAdditional SEMI
+			VarAdditional SEMI {: currentType = null; :}
 			; 
 
 
-VarAdditional ::= VarAdditional COMMA IDENT ArrayBrackets
+VarAdditional ::= VarAdditional COMMA IDENT:varName ArrayBrackets
+				  {:
+				  		if(isFirstDeclaration(varName, varNameleft)){
+							Obj temp = Tab.find(varName);
+							if(temp == Tab.noObj)
+								parser.report_error("Promenljiva " + varName + " je vec bila deklarisana. Linija: " + varNameleft, null);
+							else
+							{
+								Struct type = currentType;
+								
+								if(isArrayType)
+									type = new Struct(Struct.Array, currentType);
+
+								if(currentClass!=null){
+									Tab.insert(Obj.Fld, varName, varType);
+									parser.report_info("Deklarisano polje klase " + currentClass.getName() ":"+ varName+ " na liniji "+ varNameleft, null);
+								} else {
+									Tab.insert(Obj.Var, varName, varType);
+									parser.report_info("Deklarisana promenljiva "+ varName+ " na liniji "+ varNameleft, null);
+								}
+							}
+						}
+				
+				  :}
 				  |
 				  /* epsilon */
 				  ;
 
 
 ArrayBrackets ::= LBRACKET RBRACKET
+				  {: isArrayType = true; :}
 				  |
 				  /* epsilon */
+				  {: isArrayType = false; :}
 				  ;
 
-ClassDecl ::= CLASS IDENT ExtendsDecl LBRACE VarDeclList ClassMethodDeclList RBRACE;
+ClassDecl ::= CLASS IDENT:name ExtendsDecl:type LBRACE
+			  {: 
+			  		globalScope = false;
+					if(isFirstDeclaration(name, nameleft) && type != Tab.nullType){
+						currentClass = Tab.insert(Obj.Type, name, new Struct(Struct.Class));
+						parser.report_info("Deklarisana klasa " + name " na liniji " + nameleft, null);
+						Tab.openScope();
+					}
+			  :}
+			  VarDeclList ClassMethodDeclList RBRACE
+			  {:
+			  		globalScope = true;
+					Tab.chainLocalSymbols(currentClass);
+					Tab.closeScope();
+					currentClass = null;
+			  :}
+			  ;
 
 ClassMethodDeclList ::= LBRACE MethodDeclList RBRACE 
 						|
 						/* epsilon */
 						;
-
-ExtendsDecl ::= EXTENDS Type
+ExtendsDecl ::= EXTENDS Type:type
+				{:
+						if(type.getKind()==Struct.Class)
+							RESULT = type;
+						else {
+							parser.report_info("Greska na liniji " + typeleft + " extends tip nije klasa", null);
+							RESULT = Tab.nullType;
+						} 
+				:}
 				|
 				/* epsilon */
 				;
@@ -257,13 +321,19 @@ MethodDeclList ::= MethodDeclList MethodDecl
 					/* epsilon */
 					;
 
-MethodDecl ::= Type:retType IDENT:methName 
+MethodDecl ::= MethType:retType IDENT:methName 
 				{:
-					currentMethod = Tab.insert(Obj.Meth, methName, retType);
-					parser.report_info("Obradjuje se funkcija " + methName + " na liniji " + methNameleft, null);
-					Tab.openScope();
+					if(isFirstDeclaration(methName, methNameleft) && retType!=Tab.nullType){
+						currentMethod = Tab.insert(Obj.Meth, methName, retType);
+						parser.report_info("Obradjuje se funkcija " + methName + " na liniji " + methNameleft, null);
+						Tab.openScope();
+					}
 				:}
-				LPAREN FormPars RPAREN VarDeclList LBRACE
+				LPAREN FormPars RPAREN
+				{:
+
+				:}
+				VarDeclList LBRACE
 			   {: 
 			   		currentMethod.setAdr(Code.pc);
 			   		if ("main".equals(methName)) {
@@ -289,6 +359,17 @@ MethodDecl ::= Type:retType IDENT:methName
 				 
 			   :}
 			   ;
+
+MethType ::= Type:type
+			 {:
+			 	RESULT = type;
+			 :}
+			 |
+			 VOID
+			 {:
+			 	RESULT = Tab.noType;
+			 :}
+			 ;
 				
 
 FormPars ::= FormalParamList | /* epsilon */ ;
@@ -298,7 +379,18 @@ FormalParamList ::= FormalParamList COMMA FormalParamDecl
 					FormalParamDecl
 					;
 
-FormalParamDecl ::= Type IDENT ArrayBrackets ;
+FormalParamDecl ::= Type:type IDENT:name ArrayBrackets 
+					{:
+						if(isFirstDeclaration(name, nameleft) && type != Tab.nullType){
+							Struct methType = type;
+							if(isArrayType){
+								methType = new Struct(Struct.Array, type);
+							}
+							Tab.insert(Obj.Var, name, methType);
+							parser.report_info("Formalni parametar " + name ,null);
+						}
+					:}
+					;
 
 StatementList ::= StatementList Statement 
 					|
