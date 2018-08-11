@@ -12,7 +12,6 @@ parser code {:
 	
 	int printCallCount = 0;
 	boolean errorDetected = false;
-	boolean isArrayType = false;
 
 	Struct boolType;
 
@@ -77,6 +76,7 @@ action code {:
 	Obj currentClass = null;
 	Struct currentType = null;
 	Struct listDeclType = Tab.nullType;
+	boolean isArrayType = false;
 
 	boolean isFirstDeclaration(String name, int line)
 	{
@@ -106,7 +106,7 @@ non terminal Program, ProgDeclList, ProgDecl;
 non terminal VarDeclList, VarDecl, VarAdditional;
 non terminal ClassDecl, ExtendsDecl, ClassMethodDeclList;
 non terminal ArrayBrackets;
-non terminal MethodDeclList, MethodDecl, MethType;
+non terminal MethodDeclList, MethodDecl;
 non terminal ConstDecl, ConstAssigment, ConstValue;
 non terminal FormalParamList, FormalParamDecl, FormPars, ActualPars, ActualParamList; 
 non terminal StatementList, Statement, Addop, Mulop, Relop;
@@ -116,7 +116,7 @@ non terminal FactorMulopList,ArrayBracketsWithArg;
 non terminal Condition, CondTermList, CondTerm, CondFactList, CondFact;
 
 non terminal Obj ProgName, Designator;
-non terminal Struct Type, Term, Expr, Factor;
+non terminal Struct Type, MethType, Term, Expr, Factor;
 
 Program ::= PROG ProgName:p ProgDeclList {: globalScope = false; :} LBRACE MethodDeclList RBRACE 
 {:
@@ -153,7 +153,7 @@ ConstDecl ::= CONST Type:type IDENT:name
 					if(isFirstDeclaration(name, nameleft) && listDeclType != Tab.nullType)
 					{	
 						Obj temp = Tab.insert(Obj.Con, name, type);
-						parser.report_info("Deklarisana konstanta "+ name+" na liniji "+ nameleft, null);
+						parser.report_info("Deklarisana konstanta "+ name + " na liniji "+ nameleft, null);
 					}
               :}
               EQUAL ConstValue ConstAssigment {: currentType = null; constDecl = false; :} SEMI;
@@ -181,11 +181,11 @@ ConstValue ::= NUM_CONST:i
 			   :}
 			   ;
 
-ConstAssigment ::= ConstAssigment COMMA IDENT:n 
+ConstAssigment ::= ConstAssigment COMMA IDENT:name
 				   {:
 				    	if(isFirstDeclaration(name, nameleft) && listDeclType != Tab.nullType)
 						{	
-							Obj temp = Tab.insert(Obj.Con, n, currentType);
+							Obj temp = Tab.insert(Obj.Con, name, currentType);
 							parser.report_info("Deklarisana konstanta "+ name+" na liniji "+ nameleft, null);
 						}
 				   :}
@@ -215,7 +215,7 @@ VarDecl ::= Type:varType IDENT:varName ArrayBrackets
 							type = new Struct(Struct.Array, varType);
 						if(currentClass!=null){
 							Tab.insert(Obj.Fld, varName, varType);
-							parser.report_info("Deklarisano polje klase " + currentClass.getName() ":"+ varName+ " na liniji "+ varNameleft, null);
+							parser.report_info("Deklarisano polje klase " + currentClass.getName() + ":"+ varName+ " na liniji "+ varNameleft, null);
 						} else {
 							Tab.insert(Obj.Var, varName, varType);
 							parser.report_info("Deklarisana promenljiva "+ varName+ " na liniji "+ varNameleft, null);
@@ -241,10 +241,10 @@ VarAdditional ::= VarAdditional COMMA IDENT:varName ArrayBrackets
 									type = new Struct(Struct.Array, currentType);
 
 								if(currentClass!=null){
-									Tab.insert(Obj.Fld, varName, varType);
-									parser.report_info("Deklarisano polje klase " + currentClass.getName() ":"+ varName+ " na liniji "+ varNameleft, null);
+									Tab.insert(Obj.Fld, varName, currentType);
+									parser.report_info("Deklarisano polje klase " + currentClass.getName() + ":"+ varName+ " na liniji "+ varNameleft, null);
 								} else {
-									Tab.insert(Obj.Var, varName, varType);
+									Tab.insert(Obj.Var, varName, currentType);
 									parser.report_info("Deklarisana promenljiva "+ varName+ " na liniji "+ varNameleft, null);
 								}
 							}
@@ -268,7 +268,7 @@ ClassDecl ::= CLASS IDENT:name ExtendsDecl:type LBRACE
 			  		globalScope = false;
 					if(isFirstDeclaration(name, nameleft) && type != Tab.nullType){
 						currentClass = Tab.insert(Obj.Type, name, new Struct(Struct.Class));
-						parser.report_info("Deklarisana klasa " + name " na liniji " + nameleft, null);
+						parser.report_info("Deklarisana klasa " + name + " na liniji " + nameleft, null);
 						Tab.openScope();
 					}
 			  :}
@@ -324,7 +324,7 @@ MethodDeclList ::= MethodDeclList MethodDecl
 MethodDecl ::= MethType:retType IDENT:methName 
 				{:
 					if(isFirstDeclaration(methName, methNameleft) && retType!=Tab.nullType){
-						currentMethod = Tab.insert(Obj.Meth, methName, retType);
+						currentMethod = Tab.insert(Obj.Meth, methName, (Struct) retType);
 						parser.report_info("Obradjuje se funkcija " + methName + " na liniji " + methNameleft, null);
 						Tab.openScope();
 					}
