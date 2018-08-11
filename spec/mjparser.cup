@@ -150,11 +150,12 @@ ConstDecl ::= CONST Type:type IDENT:name
               {:
 			  		constDecl = true;
 					currentType = type;
-					if(isFirstDeclaration(name, nameleft) && listDeclType != Tab.nullType)
+					if(isFirstDeclaration(name, nameleft))
 					{	
 						Obj temp = Tab.insert(Obj.Con, name, type);
 						parser.report_info("Deklarisana konstanta "+ name + " na liniji "+ nameleft, null);
 					}
+					listDeclType = type;
               :}
               EQUAL ConstValue ConstAssigment {: currentType = null; constDecl = false; :} SEMI;
 
@@ -205,8 +206,8 @@ VarDecl ::= Type:varType IDENT:varName ArrayBrackets
 				currentType = varType;
 				if(isFirstDeclaration(varName, varNameleft)){
 					Obj temp = Tab.find(varName);
-					if(temp == Tab.noObj)
-						parser.report_error("Promenljiva " + varType + " je vec bila deklarisana. Linija: " + varNameleft, null);
+					if(temp != Tab.noObj)
+						parser.report_error("Promenljiva " + varName + " je vec bila deklarisana. Linija: " + varNameleft, null);
 					else
 					{
 						Struct type = varType;
