@@ -1,53 +1,67 @@
-// Test301
+//Test 302
 
-program test301
+program test302
 
-	const int jedan = 1;
-	const int pet = 5;
 
-	int niz[];
-	
-	char nizch[];
-	
+int i;
+bool ibool;
+
+int niz[];
 {
-	void main()	int bodovi;
+	
+	int sum(int z, int d)
 	{
+		return z + d;
+	}
 	
-		bodovi = 0;
-		bodovi = 0;
-		bodovi++;
-		bodovi--;
-		bodovi = bodovi + 1;
-		bodovi = bodovi * pet;
-		print(bodovi); 
-			
-		
-		niz = new int[2];
-		niz[0] = pet;
-		niz[1] = 10;
-		bodovi = niz[1];
-		print(bodovi); 
-		print(niz[1]);
-		
-		
-		nizch = new char[3];
-		nizch[0] = 'a';
-		nizch[jedan] = 'b';
-		nizch[pet - 3] = 'c';
-		print( nizch[2 - 1]);
-		print( nizch[jedan * 2]);
-			
-		
-		bodovi = bodovi + ((pet * jedan - 1) * 2 - (3 % 2 + 3 * 2 - 3) - 1 * 0); 
-		print(bodovi);
-			
-			
-		read(bodovi);
-		bodovi = bodovi + 1;
-		print(bodovi);
-			
+	int inkrement(int a) int pom; 
+	{
+		pom = 1;
+		return sum(a,pom);
+	}
 	
+	void main()
+	{
+
+			
+
+			
+		ibool = false;
+		i = 0;
+		do
+		{
+			if(i == 2) ibool = true;
+			i++;
+		}while(i < 5);
+		
+		
+		niz = new int[3];
+		niz[0] = 1;
+		niz[1] = 2;
+		niz[2] = sum(niz[1], niz[0])  + 1;
+
+		
+		print(eol);
+		i = 0;
+		do 
+		{
+			if(i == 3)
+			{
+				i++;
+				continue;
+			}
+			if(i == 4) break;
+			i = inkrement(i);
+		}while (true);
+  
+		
+		read(niz[0]);
+		read(niz[1]);
+		read(niz[2]);
+		print(eol);
+		
+		print(sum (sum(niz[0], niz[1]), niz[2])); 
+			
 	}
 }
-
 

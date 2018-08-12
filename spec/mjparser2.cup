@@ -14,6 +14,7 @@ parser code {:
 	
 	int printCallCount = 0;
 	boolean errorDetected = false;
+	boolean foundMain = false;
 
 	Struct boolType;
 
@@ -104,6 +105,7 @@ action code {:
 	Struct currentType = null;
 	Struct listDeclType = Tab.nullType;
 	boolean isArrayType = false;
+	boolean noArgs = false;
 
 	
 
@@ -203,7 +205,6 @@ ConstValue ::= NUM_CONST:i
 			   		if(constDecl && parser.isCurrentScope(ScopeEnum.GLOBAL))
 						parser.globalConstCount++; 
 					RESULT = new Obj(Obj.Con, "numValue", Tab.intType, i, 0);
-					// provera tipa
 			   :}
 			   |
 			   CHAR_CONST:c 
@@ -228,6 +229,7 @@ ConstAssigment ::= ConstAssigment COMMA IDENT:name
 							Obj temp = Tab.insert(Obj.Con, name, currentType);
 							parser.report_info("Deklarisana konstanta "+ name+" na liniji "+ nameleft, null);
 						}
+						
 				   :}
 						
 				   EQUAL ConstValue:value
@@ -389,6 +391,11 @@ MethodDecl ::= MethType:retType IDENT:methName
 				LPAREN FormPars RPAREN
 				{:
 					parser.push(ScopeEnum.LOCAL);
+					if("main".equals(methName) && retType==Tab.noType && noArgs){
+						parser.report_info("Main nadjen", null);
+						parser.foundMain = true;
+					}
+					noArgs = false;
 				:}
 				VarDeclList LBRACE
 			   {: 
@@ -430,7 +437,7 @@ MethType ::= Type:type
 			 ;
 				
 
-FormPars ::= FormalParamList | /* epsilon */ ;
+FormPars ::= FormalParamList | /* epsilon */ {: noArgs = true; :};
 
 FormalParamList ::= FormalParamList COMMA FormalParamDecl
 					|
@@ -445,7 +452,7 @@ FormalParamDecl ::= Type:type IDENT:name ArrayBrackets
 								methType = new Struct(Struct.Array, type);
 							}
 							Tab.insert(Obj.Var, name, methType);
-							parser.report_info("Formalni parametar " + name ,null);
+							parser.report_info("Formalni parametar " + name + " na liniji " + nameleft + (isArrayType? " niz" : ""), null);
 						}
 					:}
 					;
@@ -457,7 +464,10 @@ StatementList ::= StatementList Statement
 
 Statement ::= Matched | Unmatched ;
 
-Unmatched ::= IF LPAREN Condition RPAREN Statement | IF LPAREN Condition RPAREN Matched ELSE Unmatched;
+Unmatched ::= IF LPAREN Condition RPAREN Statement 
+			  |
+			  IF LPAREN Condition RPAREN Matched ELSE Unmatched
+			  ;
 	
 Matched ::=   DesignatorStatement SEMI
 			  |
@@ -502,13 +512,48 @@ Matched ::=   DesignatorStatement SEMI
 			  LBRACE StatementList RBRACE
 			  ;
 
-DesignatorStatement ::= Designator EQUAL Expr {: parser.report_info("=", null); :}
+DesignatorStatement ::= Designator:d EQUAL Expr:e
+						{:
+							if((d.getKind()==Obj.Var) || (d.getKind()==Obj.Fld) || (d.getKind()==Obj.Elem)){
+								if(!e.assignableTo(d.getType())){
+									parser.report_error("Greska na liniji " + dleft + ", nisu kompatibilni tipovi pri dodeljivanju vrednosti", null);
+								} else {
+									parser.report_info("Dodela vrednosti promenljivoj " + d.getName(), null);
+								}
+							} else {
+								parser.report_error("Greska na liniji " + dleft + ": operand moze biti promenljiva, element niza ili polje klase", null);
+							}							
+						:}
 						|
-						Designator LPAREN ActualPars RPAREN {: parser.report_info("()", null); :}
+						Designator:d LPAREN ActualPars:pars RPAREN
+						{:
+								if (d.getName().equals("chr") && pars!=Tab.intType)
+									parser.report_error("Greska na liniji " + dleft + ": argument metode chr mora biti tipa int", null);
+								if (d.getName().equals("ord") && pars!=Tab.charType)
+									parser.report_error("Greska na liniji " + dleft + ": argument metode ord mora biti tipa char", null);
+						:}
 						|
-						Designator INC {: parser.report_info("++", null); :}
+						Designator:d INC
+						{:
+							if((d.getKind()==Obj.Var) || (d.getKind()==Obj.Fld) || (d.getKind()==Obj.Elem)){
+								if(d.getType != Tab.intType){
+									parser.report_error("Greska na liniji " + dleft + ": inc radi samo za int", null);
+								}
+							} else {
+								parser.report_error("Greska na liniji " + dleft + ": operand moze biti promenljiva, element niza ili polje klase", null);
+							}
+						:} 
 						|
-						Designator DEC {: parser.report_info("--", null); :}
+						Designator:d DEC
+						{:
+							if((d.getKind()==Obj.Var) || (d.getKind()==Obj.Fld) || (d.getKind()==Obj.Elem)){
+								if(d.getType != Tab.intType){
+									parser.report_error("Greska na liniji " + dleft + ": dec radi samo za int", null);
+								}
+							} else {
+								parser.report_error("Greska na liniji " + dleft + ": operand moze biti promenljiva, element niza ili polje klase", null);
+							}
+						:}						
 						;
 
 
@@ -658,8 +703,3 @@ Mulop ::= MUL
  		  MOD
 		  {: RESULT = Code.mul; :}
 		  ;
-		   
-   
-			  
-
-
