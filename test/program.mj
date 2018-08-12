@@ -26,25 +26,25 @@ program test301
 		niz[0] = pet;
 		niz[1] = 10;
 		bodovi = niz[1];
-//		print(bodovi); 
-//		print(niz[1]);
+		print(bodovi); 
+		print(niz[1]);
 		
 		
-//		nizch = new char[3];
-//		nizch[0] = 'a';
-//		nizch[jedan] = 'b';
-//		nizch[pet - 3] = 'c';
-//		print( nizch[2 - 1]);
-//		print( nizch[jedan * 2]);
+		nizch = new char[3];
+		nizch[0] = 'a';
+		nizch[jedan] = 'b';
+		nizch[pet - 3] = 'c';
+		print( nizch[2 - 1]);
+		print( nizch[jedan * 2]);
 			
 		
-//		bodovi = bodovi + ((pet * jedan - 1) * 2 - (3 % 2 + 3 * 2 - 3) - 1 * 0); 
-//		print(bodovi);
+		bodovi = bodovi + ((pet * jedan - 1) * 2 - (3 % 2 + 3 * 2 - 3) - 1 * 0); 
+		print(bodovi);
 			
 			
-//		read(bodovi);
-//		bodovi = bodovi + 1;
-//		print(bodovi);
+		read(bodovi);
+		bodovi = bodovi + 1;
+		print(bodovi);
 			
 	
 	}

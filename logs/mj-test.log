@@ -1,17 +1,27 @@
-INFO  16:37:34,758 - Compiling source file: D:\GitKraken\Compiler-Construction-1\test\program.mj
-INFO  16:37:34,771 - Deklarisana konstanta jedan na liniji 5
-INFO  16:37:34,771 - Deklarisana konstanta pet na liniji 6
-INFO  16:37:34,771 - Deklarisana globalna promenljiva niz na liniji 8
-INFO  16:37:34,771 - Deklarisana globalna promenljiva nizch na liniji 10
-INFO  16:37:34,771 - Obradjuje se funkcija main na liniji 13
-INFO  16:37:34,771 - Deklarisana lokalna promenljiva bodovi na liniji 13
-INFO  16:37:34,772 - =
-INFO  16:37:34,772 - =
-INFO  16:37:34,772 - ++
-INFO  16:37:34,772 - --
-INFO  16:37:34,772 - =
-INFO  16:37:34,772 - =
-INFO  16:37:34,773 - new2 
-INFO  16:37:34,773 - =
-INFO  16:37:34,773 - =
-INFO  16:37:34,773 - =
+INFO  18:58:00,248 - Compiling source file: D:\GitKraken\Compiler-Construction-1\test\program.mj
+INFO  18:58:00,259 - Deklarisana konstanta jedan na liniji 5
+INFO  18:58:00,259 - Deklarisana konstanta pet na liniji 6
+INFO  18:58:00,259 - Deklarisana globalna promenljiva niz na liniji 8
+INFO  18:58:00,259 - Deklarisana globalna promenljiva nizch na liniji 10
+INFO  18:58:00,259 - Obradjuje se funkcija main na liniji 13
+INFO  18:58:00,259 - Deklarisana lokalna promenljiva bodovi na liniji 13
+INFO  18:58:00,260 - =
+INFO  18:58:00,260 - =
+INFO  18:58:00,260 - ++
+INFO  18:58:00,260 - --
+INFO  18:58:00,260 - =
+INFO  18:58:00,260 - =
+INFO  18:58:00,260 - new2 
+INFO  18:58:00,260 - =
+INFO  18:58:00,261 - =
+INFO  18:58:00,261 - =
+INFO  18:58:00,261 - =
+INFO  18:58:00,261 - new2 
+INFO  18:58:00,261 - =
+INFO  18:58:00,261 - =
+INFO  18:58:00,261 - =
+INFO  18:58:00,261 - =
+INFO  18:58:00,262 - =
+INFO  18:58:00,262 - =
+INFO  18:58:00,262 - Print calls = 7
+INFO  18:58:00,264 - Parsiranje uspesno zavrseno!

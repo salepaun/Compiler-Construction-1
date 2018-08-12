@@ -87,7 +87,6 @@ scan with {:
 	return s;
 :}
 
-
 init with {:
 	Tab.init(); // Universe scope
 	boolType = new Struct(Struct.Bool);
@@ -189,11 +188,11 @@ ConstDecl ::= CONST Type:type IDENT:name
 			  {: 
 					if(type!=value.getType())
 					{
-						parser.report_info("Greska tipovi se ne slazu, konstanta " + name " : " + nameleft + " na liniji "+ nameleft, null);
+						parser.report_info("Greska tipovi se ne slazu, konstanta " + name + " : " + nameleft + " na liniji "+ nameleft, null);
 					}
 					else if (type.getKind() == Struct.Array){
 						if(type.getElemType() != value.getType().getElemType()){
-							parser.report_info("Greska tipovi se ne slazu niz, konstanta " + name " : " + nameleft + " na liniji "+ nameleft, null);
+							parser.report_info("Greska tipovi se ne slazu niz, konstanta " + name + " : " + nameleft + " na liniji "+ nameleft, null);
 						}
 					}
 			  :} 
@@ -235,11 +234,11 @@ ConstAssigment ::= ConstAssigment COMMA IDENT:name
 				   {: 
 						if(currentType!=value.getType())
 						{
-							parser.report_info("Greska tipovi se ne slazu, konstanta " + name " : " + nameleft + " na liniji "+ nameleft, null);
+							parser.report_info("Greska tipovi se ne slazu, konstanta " + name + " : " + nameleft + " na liniji "+ nameleft, null);
 						}
 						else if (currentType.getKind() == Struct.Array){
 							if(currentType.getElemType() != value.getType().getElemType()){
-								parser.report_info("Greska tipovi se ne slazu niz, konstanta " + name " : " + nameleft + " na liniji "+ nameleft, null);
+								parser.report_info("Greska tipovi se ne slazu niz, konstanta " + name + " : " + nameleft + " na liniji "+ nameleft, null);
 							}
 						}
 			  	   :}  
@@ -266,10 +265,10 @@ VarDecl ::= Type:varType IDENT:varName ArrayBrackets
 						if(isArrayType)
 							type = new Struct(Struct.Array, varType);
 						if(currentClass!=null){
-							Tab.insert(Obj.Fld, varName, varType);
+							Tab.insert(Obj.Fld, varName, type);
 							parser.report_info("Deklarisano polje klase " + currentClass.getName() + ":"+ varName+ " na liniji "+ varNameleft, null);
 						} else {
-							Tab.insert(Obj.Var, varName, varType);
+							Tab.insert(Obj.Var, varName, type);
 							if(parser.scopeStack.peek()==ScopeEnum.LOCAL){
 								parser.report_info("Deklarisana lokalna promenljiva "+ varName+ " na liniji "+ varNameleft, null);
 							} else 
@@ -451,7 +450,7 @@ FormalParamDecl ::= Type:type IDENT:name ArrayBrackets
 					:}
 					;
 
-StatementList ::= StatementList Statement 
+StatementList ::= StatementList Statement
 					|
 				  /* epsilon */
 				  ;
@@ -525,7 +524,7 @@ Expr ::= Expr:te Addop Term:t
 		:}
 		|
 		Term:t
-		{: RESULT = t; parser.report_info("Term " + t, null); :}
+		{: RESULT = t; :}
 		;
 
 					
@@ -586,9 +585,7 @@ Factor ::=  Designator:d
 			LPAREN Expr:exp RPAREN
 			{: RESULT = exp; :}
 		   ;
-
-
-			  
+  
 ActualPars ::= ActualParamList 
 				| 
 			   /* epsilon */ 
@@ -625,7 +622,21 @@ Designator ::= IDENT:name
 			   |
 			   Designator DOT IDENT
 			   |
-			   Designator LBRACKET Expr RBRACKET 
+			   Designator:d LBRACKET Expr:exp RBRACKET
+			   {:
+					if (exp != Tab.intType) {
+						parser.report_error("Greska na liniji " + expleft + ": izraz unutar zagrada [] mora biti tipa int", null);
+						RESULT = Tab.noObj;
+					} else {
+						if (d.getType().getKind() == Struct.Array) {
+							RESULT = new Obj(Obj.Elem, "DesignatorArray", d.getType().getElemType());
+						} else {
+							parser.report_error("Greskaa na liniji " + dleft + ": " + d.getName() + " mora biti niz", null);
+							RESULT = Tab.noObj;
+						}
+					}
+
+			   :} 
 			   ;
 
 
