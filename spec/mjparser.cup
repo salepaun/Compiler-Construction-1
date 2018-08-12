@@ -1,7 +1,9 @@
 package rs.ac.bg.etf.pp1;
 
 import java_cup.runtime.*;
+import java.util.*;
 import org.apache.log4j.*;
+import rs.ac.bg.etf.pp1.MJParser.ScopeEnum;
 
 // import java.io.*;
 import rs.etf.pp1.symboltable.Tab;
@@ -18,9 +20,34 @@ parser code {:
 	int globalConstCount = 0;
 	int globalVarCount = 0;
 
-	
+	public enum ScopeEnum {
+		GLOBAL,
+		LOCAL,
+		CLASS
+	}
+
+	Stack<ScopeEnum> scopeStack;
+
 	Logger log = Logger.getLogger(getClass());
    
+
+   	public boolean isCurrentScope(ScopeEnum type){
+		   return type == scopeStack.peek();
+	}
+
+	public void push(ScopeEnum type){
+		scopeStack.push(type);
+	}
+
+	public boolean popCheck(ScopeEnum type){
+		if(scopeStack.isEmpty()) { report_error("Stack je prazan ", null);  return false;}
+		ScopeEnum e = scopeStack.pop();
+		if(e!=type){
+			report_error("Ocekivan je " + type + " a nadjen " + e ,null);
+			return false;
+		}
+		return true;
+	}
    
     // slede redefinisani metodi za prijavu gresaka radi izmene teksta poruke
     public void report_fatal_error(String message, Object info) throws java.lang.Exception {
@@ -55,8 +82,8 @@ parser code {:
 
 scan with {:
 	Symbol s = this.getScanner().next_token();	
-	if (s != null && s.value != null) 
-		log.info(s.toString() + " " + s.value.toString());
+	//if (s != null && s.value != null) 
+	//	log.info(s.toString() + " " + s.value.toString() + " \t\tline: " + s.left);
 	return s;
 :}
 
@@ -66,10 +93,11 @@ init with {:
 	boolType = new Struct(Struct.Bool);
 	Obj boolObj = new Obj(Obj.Type, "bool", boolType);
 	Tab.currentScope().addToLocals(boolObj);
+	scopeStack = new Stack<ScopeEnum>();
+	scopeStack.push(ScopeEnum.GLOBAL);
 :}
 
 action code {:
-	boolean globalScope = false;
 	boolean constDecl = false;
 	boolean returnFound = false;
 	Obj currentMethod = null;
@@ -77,6 +105,9 @@ action code {:
 	Struct currentType = null;
 	Struct listDeclType = Tab.nullType;
 	boolean isArrayType = false;
+
+	
+
 
 	boolean isFirstDeclaration(String name, int line)
 	{
@@ -111,19 +142,16 @@ non terminal ConstDecl, ConstAssigment, ConstValue;
 non terminal FormalParamList, FormalParamDecl, FormPars, ActualPars, ActualParamList; 
 non terminal StatementList, Statement, Addop, Mulop, Relop;
 non terminal Unmatched, Matched;
-non terminal DesignatorStatement, DesignatorStatementOp, DesignatorModList, DesignatorMod;
-non terminal FactorMulopList,ArrayBracketsWithArg; 
-non terminal Condition, CondTermList, CondTerm, CondFactList, CondFact;
-
+non terminal DesignatorStatement;
+non terminal Condition, CondTerm, CondFact;
 non terminal Obj ProgName, Designator;
 non terminal Struct Type, MethType, Term, Expr, Factor;
 
-Program ::= PROG ProgName:p ProgDeclList {: globalScope = false; :} LBRACE MethodDeclList RBRACE 
+Program ::= PROG ProgName:p ProgDeclList LBRACE MethodDeclList RBRACE 
 {:
 	Code.dataSize = Tab.currentScope().getnVars();
 	Tab.chainLocalSymbols(p);
 	Tab.closeScope(); 
-	globalScope = true;
 :}
 ;
 
@@ -161,7 +189,7 @@ ConstDecl ::= CONST Type:type IDENT:name
 
 ConstValue ::= NUM_CONST:i 
 			   {:
-			   		if(constDecl && globalScope)
+			   		if(constDecl && parser.isCurrentScope(ScopeEnum.GLOBAL))
 						parser.globalConstCount++; 
 					RESULT = new Obj(Obj.Con, "numValue", Tab.intType, i, 0);
 					// provera tipa
@@ -169,14 +197,14 @@ ConstValue ::= NUM_CONST:i
 			   |
 			   CHAR_CONST:c 
 			   {:
-			   		if(constDecl && globalScope)
+			   		if(constDecl && parser.isCurrentScope(ScopeEnum.GLOBAL))
 						parser.globalConstCount++;
 					RESULT = new Obj(Obj.Con, "charValue", Tab.charType, c, 0);
 			   :}
 			   |
 			   BOOL_CONST:b
 			   {:
-			   		if(constDecl && globalScope)
+			   		if(constDecl && parser.isCurrentScope(ScopeEnum.GLOBAL))
 						parser.globalConstCount++;
 					RESULT = new Obj(Obj.Con, "boolValue", Tab.find("bool").getType(), b?1:0, 0);
 			   :}
@@ -219,7 +247,10 @@ VarDecl ::= Type:varType IDENT:varName ArrayBrackets
 							parser.report_info("Deklarisano polje klase " + currentClass.getName() + ":"+ varName+ " na liniji "+ varNameleft, null);
 						} else {
 							Tab.insert(Obj.Var, varName, varType);
-							parser.report_info("Deklarisana promenljiva "+ varName+ " na liniji "+ varNameleft, null);
+							if(parser.scopeStack.peek()==ScopeEnum.LOCAL){
+								parser.report_info("Deklarisana lokalna promenljiva "+ varName+ " na liniji "+ varNameleft, null);
+							} else 
+							parser.report_info("Deklarisana globalna promenljiva "+ varName+ " na liniji "+ varNameleft, null);
 						}
 					}
 				}
@@ -246,6 +277,9 @@ VarAdditional ::= VarAdditional COMMA IDENT:varName ArrayBrackets
 									parser.report_info("Deklarisano polje klase " + currentClass.getName() + ":"+ varName+ " na liniji "+ varNameleft, null);
 								} else {
 									Tab.insert(Obj.Var, varName, currentType);
+									if(parser.scopeStack.peek()==ScopeEnum.LOCAL){
+										parser.report_info("Deklarisana lokalna promenljiva "+ varName+ " na liniji "+ varNameleft, null);
+									} else 
 									parser.report_info("Deklarisana promenljiva "+ varName+ " na liniji "+ varNameleft, null);
 								}
 							}
@@ -266,7 +300,7 @@ ArrayBrackets ::= LBRACKET RBRACKET
 
 ClassDecl ::= CLASS IDENT:name ExtendsDecl:type LBRACE
 			  {: 
-			  		globalScope = false;
+			  		parser.push(ScopeEnum.CLASS);
 					if(isFirstDeclaration(name, nameleft) && type != Tab.nullType){
 						currentClass = Tab.insert(Obj.Type, name, new Struct(Struct.Class));
 						parser.report_info("Deklarisana klasa " + name + " na liniji " + nameleft, null);
@@ -275,7 +309,7 @@ ClassDecl ::= CLASS IDENT:name ExtendsDecl:type LBRACE
 			  :}
 			  VarDeclList ClassMethodDeclList RBRACE
 			  {:
-			  		globalScope = true;
+					parser.popCheck(ScopeEnum.CLASS);
 					Tab.chainLocalSymbols(currentClass);
 					Tab.closeScope();
 					currentClass = null;
@@ -332,10 +366,11 @@ MethodDecl ::= MethType:retType IDENT:methName
 				:}
 				LPAREN FormPars RPAREN
 				{:
-
+					parser.push(ScopeEnum.LOCAL);
 				:}
 				VarDeclList LBRACE
 			   {: 
+			   		parser.popCheck(ScopeEnum.LOCAL);
 			   		currentMethod.setAdr(Code.pc);
 			   		if ("main".equals(methName)) {
 			   			Code.mainPc = currentMethod.getAdr();
@@ -400,11 +435,11 @@ StatementList ::= StatementList Statement
 
 Statement ::= Matched | Unmatched ;
 
-Unmatched ::= IF Expr Statement | IF Expr Matched ELSE Unmatched;
+Unmatched ::= IF LPAREN Condition RPAREN Statement | IF LPAREN Condition RPAREN Matched ELSE Unmatched;
 	
 Matched ::=   DesignatorStatement SEMI
 			  |
-			  IF Expr Matched ELSE Matched
+			  IF LPAREN Condition RPAREN Matched ELSE Matched
 			  |
 			  DO Statement WHILE LPAREN Condition RPAREN SEMI
 			  |
@@ -439,21 +474,22 @@ Matched ::=   DesignatorStatement SEMI
 			  	 	Code.loadConst(1);
 			  	 	Code.put(Code.bprint);
 			  	 }
+				 //System.out.println("Print gotov");
 			  :}
 			  |
-			  LBRACE Statement RBRACE
+			  LBRACE StatementList RBRACE
 			  ;
 
-DesignatorStatement ::= Designator DesignatorStatementOp;
+DesignatorStatement ::= Designator EQUAL Expr {: parser.report_info("=", null); :}
+						|
+						Designator LPAREN ActualPars RPAREN {: parser.report_info("()", null); :}
+						|
+						Designator INC {: parser.report_info("++", null); :}
+						|
+						Designator DEC {: parser.report_info("--", null); :}
+						;
 
-DesignatorStatementOp ::= EQUAL Expr
-						  |
-						  LPAREN ActualPars RPAREN
-						  |
-						  INC
-						  |
-						  DEC
-						  ;
+
 				  
 Expr ::= Expr:te Addop Term:t
 		{:
@@ -466,45 +502,34 @@ Expr ::= Expr:te Addop Term:t
 		:}
 		|
 		Term:t
-		{: RESULT = t; :}
-		 ;
+		{: RESULT = t; parser.report_info("Term " + t, null); :}
+		;
 
 					
-Term ::= Factor:t {: RESULT = t; :} FactorMulopList;
+Term ::= Term:te Mulop Factor:t
+		 {:
+			if (te.equals(t) && te == Tab.intType)
+					RESULT = te;
+				else {
+					parser.report_error("Greska na liniji "+ teleft+" : nekompatibilni tipovi u izrazu za mnozenje.", null);
+					RESULT = Tab.noType;
+				} 
+		 :}
+     	 | 
+     	 Factor:t
+		 {: RESULT = t; :} 
+     	 ; 
 
-FactorMulopList ::= FactorMulopList Mulop Factor 
-					|
-					/* epsilon */
-					;
 
-ArrayBracketsWithArg ::= LBRACKET ActualPars RBRACKET 
-						 | /* epsilon */
-						 ;
 
-Factor ::= NUM_CONST:i
-			{:
-				Obj c = Tab.insert(Obj.Con, "", Tab.intType);
-				c.setAdr(i.intValue());
-				Code.load(c);
-				RESULT = Tab.intType; 
-			:} 
-			|
-			CHAR_CONST
-			|
-			BOOL_CONST
-			|
-			NEW Type ArrayBracketsWithArg
-			|
-			LPAREN Expr RPAREN
-			|
-		   Designator:d
-		   {: 
+Factor ::=  Designator:d
+		    {: 
 		   		RESULT = d.getType();
 		   		Code.load(d); 
-		   :}
+		    :}
 		    |
-		   Designator:func LPAREN ActualPars RPAREN
-		   {:
+		    Designator:func LPAREN ActualPars RPAREN
+		    {:
 		       if (Obj.Meth == func.getKind()) { 
 		   	   	   parser.report_info("Pronadjen poziv funkcije " + func.getName() + " na liniji " + funcleft, null);
 		   	   	   if (func.getType() == Tab.noType) { 
@@ -520,8 +545,26 @@ Factor ::= NUM_CONST:i
 		   	   	   parser.report_error("Greska na liniji " + funcleft+" : ime " + func.getName() + " nije funkcija!", null);
 		   	   	   RESULT = Tab.noType;
 		   	   }
-		   :}
+		    :}
+		    |
+			NUM_CONST
+			{: RESULT = Tab.intType; :} 
+			|
+			CHAR_CONST
+			{: RESULT = Tab.charType; :} 
+			|
+			BOOL_CONST
+			{: RESULT = parser.boolType; :} 			
+			|
+			NEW Type LBRACKET Expr RBRACKET {: parser.report_info("new2 ", null); :}
+			|
+			NEW Type {: parser.report_info("new1 ", null); :}
+			|
+			LPAREN Expr:exp RPAREN
+			{: RESULT = exp; :}
 		   ;
+
+
 			  
 ActualPars ::= ActualParamList 
 				| 
@@ -533,43 +576,35 @@ ActualParamList ::= ActualParamList COMMA Expr
 					Expr
 					;
 
-Condition ::= CondTerm CondTermList;
+Condition ::= Condition LOGICAL_OR CondTerm 
+        	  | 
+        	  CondTerm 
+        	  ; 
 
-CondTermList ::= CondTermList LOGICAL_OR CondTerm 
-				 |
-				 /* epsilon */
-				 ;
+CondTerm ::=  CondTerm LOGICAL_AND CondFact 
+        	  | 
+        	  CondFact 
+        	  ; 
 
-CondTerm ::= CondFact CondFactList;
+CondFact ::= CondFact Relop Expr 
+       		 |
+			 Expr  
+       		 ; 
+	
+Designator ::= IDENT:name
+			   {:
+					Obj obj = Tab.find(name);
+					if (obj == Tab.noObj) { 
+						parser.report_error("Greska na liniji " + nameleft + " : ime " + name + " nije deklarisano! ", null);
+					}
+					RESULT = obj;
+			   :}
+			   |
+			   Designator DOT IDENT
+			   |
+			   Designator LBRACKET Expr RBRACKET 
+			   ;
 
-CondFactList ::= CondFactList LOGICAL_AND CondFact
-				 |
-				 /* epsilon */
-				 ;
-
-CondFact ::= Expr
-			 |
-			 Expr Relop Expr
-			 ;
-
-Designator ::= IDENT:name DesignatorModList
-{:
-	Obj obj = Tab.find(name);
-	if (obj == Tab.noObj) { 
-		parser.report_error("Greska na liniji " + nameleft+ " : ime "+name+" nije deklarisano! ", null);
-	}
-	RESULT = obj;
-:};
-
-DesignatorModList ::= DesignatorModList DesignatorMod
-					  |
-					  /* epsilon */
-					  ;
-
-DesignatorMod ::= DOT IDENT 
-				  |
-				  LBRACKET Expr RBRACKET
-				  ;
 
 Relop ::= IS_EQUAL | NOT_EQUAL | GREATER | GREATER_OR_EQUAL | LESS | LESS_OR_EQUAL;
 

@@ -42,7 +42,7 @@ public class MJParserTest {
 	        
 	        log.info("Print calls = " + p.printCallCount);
 	        
-	        //Tab.dump();
+	        Tab.dump();
 	        
 	        if (!p.errorDetected) {
 	        	File objFile = new File("test/program.obj");

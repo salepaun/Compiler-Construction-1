@@ -10,7 +10,7 @@ import rs.etf.pp1.mj.runtime.Code;
 
 parser code {:
 	
-	int printCallCount = 0;
+	int printCallCount = 0;			
 	boolean errorDetected = false;
 	
 	Logger log = Logger.getLogger(getClass());
