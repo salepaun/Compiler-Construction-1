@@ -1,0 +1,116 @@
+// generated with ast extension for cup
+// version 0.8
+// 13/7/2018 23:6:29
+
+
+package rs.ac.bg.etf.pp1.ast;
+
+public class VarDecl implements SyntaxNode {
+
+    private SyntaxNode parent;
+    private int line;
+    private Type Type;
+    private VarAssigment VarAssigment;
+    private VarAdditional VarAdditional;
+
+    public VarDecl (Type Type, VarAssigment VarAssigment, VarAdditional VarAdditional) {
+        this.Type=Type;
+        if(Type!=null) Type.setParent(this);
+        this.VarAssigment=VarAssigment;
+        if(VarAssigment!=null) VarAssigment.setParent(this);
+        this.VarAdditional=VarAdditional;
+        if(VarAdditional!=null) VarAdditional.setParent(this);
+    }
+
+    public Type getType() {
+        return Type;
+    }
+
+    public void setType(Type Type) {
+        this.Type=Type;
+    }
+
+    public VarAssigment getVarAssigment() {
+        return VarAssigment;
+    }
+
+    public void setVarAssigment(VarAssigment VarAssigment) {
+        this.VarAssigment=VarAssigment;
+    }
+
+    public VarAdditional getVarAdditional() {
+        return VarAdditional;
+    }
+
+    public void setVarAdditional(VarAdditional VarAdditional) {
+        this.VarAdditional=VarAdditional;
+    }
+
+    public SyntaxNode getParent() {
+        return parent;
+    }
+
+    public void setParent(SyntaxNode parent) {
+        this.parent=parent;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line=line;
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+
+    public void childrenAccept(Visitor visitor) {
+        if(Type!=null) Type.accept(visitor);
+        if(VarAssigment!=null) VarAssigment.accept(visitor);
+        if(VarAdditional!=null) VarAdditional.accept(visitor);
+    }
+
+    public void traverseTopDown(Visitor visitor) {
+        accept(visitor);
+        if(Type!=null) Type.traverseTopDown(visitor);
+        if(VarAssigment!=null) VarAssigment.traverseTopDown(visitor);
+        if(VarAdditional!=null) VarAdditional.traverseTopDown(visitor);
+    }
+
+    public void traverseBottomUp(Visitor visitor) {
+        if(Type!=null) Type.traverseBottomUp(visitor);
+        if(VarAssigment!=null) VarAssigment.traverseBottomUp(visitor);
+        if(VarAdditional!=null) VarAdditional.traverseBottomUp(visitor);
+        accept(visitor);
+    }
+
+    public String toString(String tab) {
+        StringBuffer buffer=new StringBuffer();
+        buffer.append(tab);
+        buffer.append("VarDecl(\n");
+
+        if(Type!=null)
+            buffer.append(Type.toString("  "+tab));
+        else
+            buffer.append(tab+"  null");
+        buffer.append("\n");
+
+        if(VarAssigment!=null)
+            buffer.append(VarAssigment.toString("  "+tab));
+        else
+            buffer.append(tab+"  null");
+        buffer.append("\n");
+
+        if(VarAdditional!=null)
+            buffer.append(VarAdditional.toString("  "+tab));
+        else
+            buffer.append(tab+"  null");
+        buffer.append("\n");
+
+        buffer.append(tab);
+        buffer.append(") [VarDecl]");
+        return buffer.toString();
+    }
+}

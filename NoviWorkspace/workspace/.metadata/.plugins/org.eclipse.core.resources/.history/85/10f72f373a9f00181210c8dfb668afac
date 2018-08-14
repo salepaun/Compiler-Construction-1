@@ -1,0 +1,115 @@
+package rs.ac.bg.etf.pp1;
+
+import java_cup.runtime.*;
+import java.util.*;
+import org.apache.log4j.*;
+
+// import java.io.*;
+import rs.etf.pp1.symboltable.Tab;
+import rs.etf.pp1.symboltable.concepts.*;
+import rs.etf.pp1.mj.runtime.Code;
+
+parser code {:
+
+	Logger log = Logger.getLogger(getClass());
+   
+    // slede redefinisani metodi za prijavu gresaka radi izmene teksta poruke
+    public void report_fatal_error(String message, Object info) throws java.lang.Exception {
+      done_parsing();
+      report_error(message, info);
+    }
+  
+    public void syntax_error(Symbol cur_token) {
+        report_error("\nSintaksna greska", cur_token);
+    }
+  
+    public void unrecovered_syntax_error(Symbol cur_token) throws java.lang.Exception {
+        report_fatal_error("Fatalna greska, parsiranje se ne moze nastaviti", cur_token);
+    }
+
+    public void report_error(String message, Object info) {
+    	errorDetected = true;
+    	StringBuilder msg = new StringBuilder(message); 
+    	if (info instanceof Symbol)
+            msg.append (" na liniji ").append(((Symbol)info).left);
+        log.error(msg.toString());
+    }
+    
+    public void report_info(String message, Object info) {
+    	StringBuilder msg = new StringBuilder(message); 
+    	if (info instanceof Symbol)
+            msg.append (" na liniji ").append(((Symbol)info).left);
+        log.info(msg.toString());
+    }
+    
+:}
+
+scan with {:
+	Symbol s = this.getScanner().next_token();	
+	//if (s != null && s.value != null) 
+	//	log.info(s.toString() + " " + s.value.toString() + " \t\tline: " + s.left);
+	return s;
+:}
+
+init with {:
+	Tab.init(); // Universe scope
+	boolType = new Struct(Struct.Bool);
+	Obj boolObj = new Obj(Obj.Type, "bool", boolType);
+	Tab.currentScope().addToLocals(boolObj);
+	scopeStack = new Stack<ScopeEnum>();
+	scopeStack.push(ScopeEnum.GLOBAL);
+:}
+
+action code {:
+	boolean constDecl = false;
+	boolean returnFound = false;
+	Obj currentMethod = null;
+	Obj currentClass = null;
+	Struct currentType = null;
+	Struct listDeclType = Tab.nullType;
+	boolean isArrayType = false;
+	boolean noArgs = false;
+
+	
+
+
+	boolean isFirstDeclaration(String name, int line)
+	{
+		if(Tab.currentScope.findSymbol(name)==null)
+			return true;
+		else {
+			parser.report_error("Greska na liniji " + line + " - promenljiva " + name + " je vec deklarisana", null);
+			return false;
+		}
+	}
+:}
+
+terminal PROG;
+terminal BREAK, CLASS, IF, ELSE, NEW, PRINT, READ, RETURN, VOID, DO, WHILE, EXTENDS, CONTINUE, CONST;
+
+terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
+terminal SEMI, COMMA, DOT;
+terminal EQUAL, PLUS, MINUS, MUL, DIV, MOD, LOGICAL_AND, LOGICAL_OR, INC, DEC;
+terminal GREATER, GREATER_OR_EQUAL, LESS, LESS_OR_EQUAL, IS_EQUAL, NOT_EQUAL;
+
+terminal String IDENT;
+terminal Integer NUM_CONST;
+terminal Character CHAR_CONST;
+terminal Boolean BOOL_CONST;
+
+non terminal Program, ProgDeclList, ProgDecl;
+non terminal VarDeclList, VarDecl, VarAdditional, VarAssigment;
+non terminal ClassDecl, ExtendsDecl, ClassMethodDeclList;
+non terminal ArrayBrackets;
+non terminal MethodDeclList, MethodDecl;
+non terminal ConstDecl, ConstAssigment, ConstAssigmentList;
+non terminal FormalParamList, FormalParamDecl, FormPars, ActualPars, ActualParamList; 
+non terminal StatementList, Statement, Addop, Mulop, Relop;
+non terminal Unmatched, Matched;
+non terminal DesignatorStatement;
+non terminal Condition, CondTerm, CondFact;
+non terminal Obj ProgName, Designator, ConstValue;
+non terminal Struct Type, MethType, Term, Expr, Factor;
+precedence left ELSE;
+
+Program ::= (Program) PROG ProgName:progName ProgDeclList LBRACE MethodDeclList RBRACE ;

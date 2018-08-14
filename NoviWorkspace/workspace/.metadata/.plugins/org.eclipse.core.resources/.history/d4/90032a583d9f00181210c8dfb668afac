@@ -1,0 +1,78 @@
+// generated with ast extension for cup
+// version 0.8
+// 13/7/2018 23:6:29
+
+
+package rs.ac.bg.etf.pp1.ast;
+
+public class VarsAdditional extends VarAdditional {
+
+    private VarAdditional VarAdditional;
+    private VarAssigment VarAssigment;
+
+    public VarsAdditional (VarAdditional VarAdditional, VarAssigment VarAssigment) {
+        this.VarAdditional=VarAdditional;
+        if(VarAdditional!=null) VarAdditional.setParent(this);
+        this.VarAssigment=VarAssigment;
+        if(VarAssigment!=null) VarAssigment.setParent(this);
+    }
+
+    public VarAdditional getVarAdditional() {
+        return VarAdditional;
+    }
+
+    public void setVarAdditional(VarAdditional VarAdditional) {
+        this.VarAdditional=VarAdditional;
+    }
+
+    public VarAssigment getVarAssigment() {
+        return VarAssigment;
+    }
+
+    public void setVarAssigment(VarAssigment VarAssigment) {
+        this.VarAssigment=VarAssigment;
+    }
+
+    public void accept(Visitor visitor) {
+        visitor.visit(this);
+    }
+
+    public void childrenAccept(Visitor visitor) {
+        if(VarAdditional!=null) VarAdditional.accept(visitor);
+        if(VarAssigment!=null) VarAssigment.accept(visitor);
+    }
+
+    public void traverseTopDown(Visitor visitor) {
+        accept(visitor);
+        if(VarAdditional!=null) VarAdditional.traverseTopDown(visitor);
+        if(VarAssigment!=null) VarAssigment.traverseTopDown(visitor);
+    }
+
+    public void traverseBottomUp(Visitor visitor) {
+        if(VarAdditional!=null) VarAdditional.traverseBottomUp(visitor);
+        if(VarAssigment!=null) VarAssigment.traverseBottomUp(visitor);
+        accept(visitor);
+    }
+
+    public String toString(String tab) {
+        StringBuffer buffer=new StringBuffer();
+        buffer.append(tab);
+        buffer.append("VarsAdditional(\n");
+
+        if(VarAdditional!=null)
+            buffer.append(VarAdditional.toString("  "+tab));
+        else
+            buffer.append(tab+"  null");
+        buffer.append("\n");
+
+        if(VarAssigment!=null)
+            buffer.append(VarAssigment.toString("  "+tab));
+        else
+            buffer.append(tab+"  null");
+        buffer.append("\n");
+
+        buffer.append(tab);
+        buffer.append(") [VarsAdditional]");
+        return buffer.toString();
+    }
+}
