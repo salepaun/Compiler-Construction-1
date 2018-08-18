@@ -1,0 +1,32 @@
+program semanticka13
+	int c[], d;
+	char b[];
+	bool boo[];
+	const int x = 3;
+	
+{
+
+	int k() {
+		return 1;
+	}
+	
+	int t(int a[], char c, int p) {
+		return 2;
+	}
+	
+	int y(char a, bool b, int c) {
+		
+		a = 1;
+		return 5; // nadji nacin da resis ovo; moze u runtime-u
+	}
+	
+	void main() char a; {
+		
+			print('3', 2);
+			read(c[1]);
+			read(boo[1]);
+			
+		
+	}
+
+}

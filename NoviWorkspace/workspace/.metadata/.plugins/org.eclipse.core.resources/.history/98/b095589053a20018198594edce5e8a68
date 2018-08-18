@@ -1,0 +1,9 @@
+program MJProgram
+{
+	int a() 
+	{
+		return 1;
+	}
+	
+	
+}

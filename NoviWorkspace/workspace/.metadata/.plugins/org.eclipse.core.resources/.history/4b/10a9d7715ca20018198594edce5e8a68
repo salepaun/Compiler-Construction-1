@@ -1,0 +1,9 @@
+program MJProgram
+const int x = 1;
+{
+	void main() int b;
+	{
+		return 1 + x * 2;
+	}
+	
+}

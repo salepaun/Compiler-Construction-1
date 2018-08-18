@@ -16,7 +16,7 @@ import rs.etf.pp1.symboltable.Tab;
 
 public class MJParserTest {
 
-	static {
+	/*static {
 		DOMConfigurator.configure(Log4JUtils.instance().findLoggerConfigFile());
 		Log4JUtils.instance().prepareLogFile(Logger.getRootLogger());
 	}
@@ -67,5 +67,5 @@ public class MJParserTest {
 	        	log.error("Parsiranje NIJE uspesno zavrseno!");
 	        }
 		}
-	}
+	}*/
 }

@@ -1,32 +1,14 @@
 package rs.ac.bg.etf.pp1;
 import org.apache.log4j.Logger;
 
-import rs.ac.bg.etf.pp1.ast.AddExpr;
-import rs.ac.bg.etf.pp1.ast.Assignment;
-import rs.ac.bg.etf.pp1.ast.Const;
-import rs.ac.bg.etf.pp1.ast.Designator;
-import rs.ac.bg.etf.pp1.ast.FuncCall;
-import rs.ac.bg.etf.pp1.ast.MethodDecl;
-import rs.ac.bg.etf.pp1.ast.MethodTypeName;
-import rs.ac.bg.etf.pp1.ast.PrintStmt;
-import rs.ac.bg.etf.pp1.ast.ProcCall;
-import rs.ac.bg.etf.pp1.ast.ProgName;
-import rs.ac.bg.etf.pp1.ast.Program;
-import rs.ac.bg.etf.pp1.ast.ReturnExpr;
-import rs.ac.bg.etf.pp1.ast.SyntaxNode;
-import rs.ac.bg.etf.pp1.ast.Term;
-import rs.ac.bg.etf.pp1.ast.TermExpr;
-import rs.ac.bg.etf.pp1.ast.Type;
-import rs.ac.bg.etf.pp1.ast.Var;
-import rs.ac.bg.etf.pp1.ast.VarDecl;
-import rs.ac.bg.etf.pp1.ast.VisitorAdaptor;
+
 import rs.etf.pp1.symboltable.Tab;
 import rs.etf.pp1.symboltable.concepts.Obj;
 import rs.etf.pp1.symboltable.concepts.Struct;
 
-public class SemanticPass extends VisitorAdaptor {
+public class SemanticPass /*extends VisitorAdaptor*/ {
 
-	boolean errorDetected = false;
+	/*boolean errorDetected = false;
 	int printCallCount = 0;
 	Obj currentMethod = null;
 	boolean returnFound = false;
@@ -183,6 +165,6 @@ public class SemanticPass extends VisitorAdaptor {
 	public boolean passed() {
 		return !errorDetected;
 	}
-	
+	*/
 }
 

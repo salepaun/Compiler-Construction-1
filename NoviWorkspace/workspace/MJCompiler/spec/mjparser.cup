@@ -8,8 +8,12 @@ import org.apache.log4j.*;
 import rs.etf.pp1.symboltable.Tab;
 import rs.etf.pp1.symboltable.concepts.*;
 import rs.etf.pp1.mj.runtime.Code;
+import rs.ac.bg.etf.pp1.ast.*;
+
 
 parser code {:
+
+	public boolean errorDetected = false;
 
 	Logger log = Logger.getLogger(getClass());
    
@@ -46,19 +50,11 @@ parser code {:
 
 scan with {:
 	Symbol s = this.getScanner().next_token();	
-	//if (s != null && s.value != null) 
-	//	log.info(s.toString() + " " + s.value.toString() + " \t\tline: " + s.left);
+	if (s != null && s.value != null) 
+		log.info(s.toString() + " " + s.value.toString() + " \t\tline: " + s.left);
 	return s;
 :}
 
-init with {:
-	Tab.init(); // Universe scope
-	boolType = new Struct(Struct.Bool);
-	Obj boolObj = new Obj(Obj.Type, "bool", boolType);
-	Tab.currentScope().addToLocals(boolObj);
-	scopeStack = new Stack<ScopeEnum>();
-	scopeStack.push(ScopeEnum.GLOBAL);
-:}
 
 action code {:
 	boolean constDecl = false;
@@ -70,18 +66,6 @@ action code {:
 	boolean isArrayType = false;
 	boolean noArgs = false;
 
-	
-
-
-	boolean isFirstDeclaration(String name, int line)
-	{
-		if(Tab.currentScope.findSymbol(name)==null)
-			return true;
-		else {
-			parser.report_error("Greska na liniji " + line + " - promenljiva " + name + " je vec deklarisana", null);
-			return false;
-		}
-	}
 :}
 
 terminal PROG;
@@ -98,10 +82,10 @@ terminal Character CHAR_CONST;
 terminal java.lang.Boolean BOOL_CONST;
 
 non terminal Program, ProgDeclList, ProgDecl;
-non terminal VarDeclList, VarDecl, VarAdditional, VarAssigment;
-non terminal ClassDecl, ExtendsDecl, ClassMethodDeclList;
+non terminal VarDeclList, VarDecl, VarAssigmentList, VarAssigment;
+non terminal ClassDecl, ClassName, ExtendsDecl, ClassMethodDeclList;
 non terminal ArrayBrackets;
-non terminal MethodDeclList, MethodDecl;
+non terminal MethodDeclList, MethodDecl, MethodName;
 non terminal ConstDecl, ConstAssigment, ConstAssigmentList, ConstValue;
 non terminal FormalParamList, FormalParamDecl, FormPars, ActualPars, ActualParamList; 
 non terminal StatementList, Statement, Addop, Mulop, Relop;
@@ -138,9 +122,9 @@ ConstValue ::= (NumConst) NUM_CONST:numValue
 			   (BoolConst) BOOL_CONST:boolValue
 			   ;
 
-ConstAssigment ::= (ConstAssigment) IDENT EQUAL ConstValue; 
+ConstAssigment ::= (ConstAssigment) IDENT:varName EQUAL ConstValue:constValue; 
 
-ConstAssigmentList ::= (ConstAssigmentsList) COMMA ConstAssigment
+ConstAssigmentList ::= (ConstAssigmentsLists) ConstAssigmentList COMMA ConstAssigment
 					   |
 					   (NoConstAssigmentsList)
 					   /* epsilon */
@@ -152,15 +136,15 @@ VarDeclList ::= (VarDeclsList) VarDeclList VarDecl
 				/* epsilon */ 
 				;
 
-VarDecl ::= (VarDecl) Type:varType VarAssigment VarAdditional SEMI; 
+VarDecl ::= (VarDecl) Type:varType VarAssigment VarAssigmentList SEMI; 
 
-VarAssigment ::= (VarAssigment) IDENT:varName ArrayBrackets;
+VarAssigment ::= (VarAssigment) IDENT:varName ArrayBrackets:arrayBrackets;
 
-VarAdditional ::= (VarsAdditional) VarAdditional COMMA VarAssigment
-				  |
-				  (NoVarsAdditional)
-				  /* epsilon */
-				  ;
+VarAssigmentList ::= (VarsAssigmentList) VarAssigmentList COMMA VarAssigment
+				  	 |
+				  	 (NoVarsAssigmentList)
+				  	 /* epsilon */
+				  	 ;
 
 
 ArrayBrackets ::= (ArrayBracket) LBRACKET RBRACKET
@@ -169,7 +153,9 @@ ArrayBrackets ::= (ArrayBracket) LBRACKET RBRACKET
 				  /* epsilon */
 				  ;
 
-ClassDecl ::= (ClassDecl) CLASS IDENT:name ExtendsDecl:type LBRACE VarDeclList ClassMethodDeclList RBRACE;
+ClassDecl ::= (ClassDecl) CLASS ClassName:className ExtendsDecl:type LBRACE VarDeclList ClassMethodDeclList RBRACE;
+
+ClassName ::= (ClassName) IDENT:className;
 
 ClassMethodDeclList ::= (ClassMethodDeclsList) LBRACE MethodDeclList RBRACE 
 						|
@@ -177,7 +163,7 @@ ClassMethodDeclList ::= (ClassMethodDeclsList) LBRACE MethodDeclList RBRACE
 						/* epsilon */
 						;
 
-ExtendsDecl ::= (ExtendsDecls) EXTENDS Type
+ExtendsDecl ::= (ExtendsDecls) EXTENDS Type:type
 				|
 				(NoExtendsDecls)
 				/* epsilon */
@@ -191,9 +177,11 @@ MethodDeclList ::=  (MethodDeclsList) MethodDeclList MethodDecl
 					/* epsilon */
 					;
 
-MethodDecl ::= (MethodDecl) MethType:retType IDENT:methName LPAREN FormPars RPAREN VarDeclList LBRACE StatementList RBRACE;
+MethodDecl ::= (MethodDecl) MethType:retType MethodName:methodName LPAREN FormPars RPAREN VarDeclList LBRACE StatementList RBRACE;
 
-MethType ::= (MethTypeNotVoid) Type
+MethodName ::= (MethodName) IDENT:methName;
+
+MethType ::= (MethTypeNotVoid) Type:type
 			 |
 			 (MethTypeVoid) VOID
 			 ;
@@ -233,62 +221,65 @@ Statement ::= (DesignatorSingleStatement) DesignatorStatement SEMI
 			  |
 			  (ReturnVoid) RETURN SEMI
 			  |
-			  (Return) RETURN Expr:t SEMI
+			  (ReturnExpr) RETURN Expr:expr SEMI
 			  |
 			  (Read) READ LPAREN Designator RPAREN SEMI
 			  |
-			  (Print) PRINT LPAREN Expr:t RPAREN SEMI 
+			  (PrintExprOnly) PRINT LPAREN Expr:expr RPAREN SEMI 
+			  |
+			  (PrintExprWithNumber) PRINT LPAREN Expr:expr COMMA NUM_CONST RPAREN SEMI 
 			  |
 			  (BraceStatementList) LBRACE StatementList RBRACE
 			  ;
 
-DesignatorStatement ::= (DesignatorAssigment) Designator:d EQUAL Expr:e
+DesignatorStatement ::= (DesignatorAssigment) Designator:designator EQUAL Expr:expr
 						|
 						(DesignatorFuncCall) Designator:d LPAREN ActualPars:pars RPAREN
 						|
-						(DesignatorInc) Designator:d INC
+						(DesignatorInc) Designator:designator INC
 						|
-						(DesignatorDec) Designator:d DEC		
+						(DesignatorDec) Designator:designator DEC		
 						;
 
 
 				  
-Expr ::= (ExprList) Expr:te Addop Term:t
+Expr ::= (ExprList) Expr:expr Addop Term:term
 		 |
-		 (ExprTerm) Term:t
+		 (ExprTerm) Term:term
+		 |
+		 (ExprNegTerm) MINUS Term:term
 		 ;
 
 					
-Term ::= (TermList) Term:te Mulop Factor:t
+Term ::= (TermList) Term:term Mulop Factor:factor
      	 | 
-     	 (TermFactor) Factor:t
+     	 (TermFactor) Factor:factor
      	 ; 
 
 
 
-Factor ::=  (FactorDesignator) Designator:d
+Factor ::=  (FactorDesignator) Designator:designator
 		    |
-		    (FactorDesignatorFuncCall) Designator:func LPAREN ActualPars RPAREN
+		    (FactorDesignatorFuncCall) Designator:func LPAREN ActualPars:actualPars RPAREN
 		    |
-			(FactorConstValue) ConstValue
+			(FactorConstValue) ConstValue:constValue
 			|
-			(FactorNewArray) NEW Type LBRACKET Expr RBRACKET
+			(FactorNewArray) NEW Type:type LBRACKET Expr:expr RBRACKET
 			|
-			(FactorNew) NEW Type
+			(FactorNew) NEW Type:type
 			|
 			(FactorExpr) LPAREN Expr:exp RPAREN
 		    ;
   
-ActualPars ::=  (ActualParsList) ActualParamList 
+ActualPars ::=  (ActualParsList) ActualParamList:actualparamList 
 				| 
 				(NoActualParsList)
 			    /* epsilon */ 
 			    ;
 			   
-ActualParamList ::= (ActualParamsList) ActualParamList COMMA Expr
+ActualParamList ::= (ActualParamsList) Expr:expr COMMA ActualParamList
 					|
-					(ActualParamsListExpr)
-					Expr
+					(ActualParamsListExpr) Expr:expr
 					;
 
 Condition ::= (ConditionOrList) Condition LOGICAL_OR CondTerm 
@@ -312,6 +303,7 @@ Designator ::= (DesignatorIdent) IDENT:name
 			   |
 			   (DesignatorArray) Designator:d LBRACKET Expr:exp RBRACKET
 			   ;
+
 
 
 Relop ::= (RelopIsEqual) IS_EQUAL 
