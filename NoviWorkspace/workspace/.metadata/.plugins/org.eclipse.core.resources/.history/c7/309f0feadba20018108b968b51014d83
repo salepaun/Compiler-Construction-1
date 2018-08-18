@@ -1,0 +1,33 @@
+program semanticka13
+	int c[], d;
+	char b[];
+	bool boo[];
+	const int x = 3;
+	
+{
+
+	int k() {
+		return 1;
+	}
+	
+	int t(int a[], char c, int p) {
+		return 2;
+	}
+	
+	int y(char a, bool b, int c) {
+		return 5;
+	}
+	
+	void main() char a; {
+		//x = k();
+		a = 'a';
+		   c[3] = 2;
+		   //break;
+				d = 2 + k() + c[1];
+			print('3', 2);
+			read(c[1]);
+			read(boo[1]);
+		}
+	}
+
+}

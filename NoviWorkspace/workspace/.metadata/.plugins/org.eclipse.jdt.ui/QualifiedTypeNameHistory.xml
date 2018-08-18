@@ -19,7 +19,6 @@
 <fullyQualifiedTypeName name="java.io.BufferedReader"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.MulopDiv"/>
 <fullyQualifiedTypeName name="java.lang.System"/>
-<fullyQualifiedTypeName name="rs.etf.pp1.symboltable.concepts.Obj"/>
 <fullyQualifiedTypeName name="org.apache.log4j.Logger"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.SyntaxNode"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Program"/>
@@ -36,15 +35,18 @@
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.CharConst"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.NumConst"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.BoolConst"/>
-<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.SemanticAnalyzer.ScopeEnum"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Term"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Type"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.TermFactor"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Designator"/>
-<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Expr"/>
-<fullyQualifiedTypeName name="rs.etf.pp1.symboltable.concepts.Struct"/>
-<fullyQualifiedTypeName name="java.util.List"/>
 <fullyQualifiedTypeName name="java.util.Collection"/>
 <fullyQualifiedTypeName name="java.util.LinkedList"/>
+<fullyQualifiedTypeName name="java.lang.String"/>
+<fullyQualifiedTypeName name="com.sun.org.apache.regexp.internal.recompile"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.SemanticAnalyzer.ScopeEnum"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Expr"/>
+<fullyQualifiedTypeName name="rs.etf.pp1.symboltable.concepts.Struct"/>
+<fullyQualifiedTypeName name="rs.etf.pp1.symboltable.concepts.Obj"/>
+<fullyQualifiedTypeName name="java.util.List"/>
 </qualifiedTypeNameHistroy>

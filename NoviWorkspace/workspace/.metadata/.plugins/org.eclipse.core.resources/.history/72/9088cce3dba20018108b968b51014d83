@@ -1,0 +1,41 @@
+program semanticka13
+	int c[], d;
+	char b[];
+	bool boo[];
+	const int x = 3;
+	
+{
+
+	int k() {
+		return 1;
+	}
+	
+	int t(int a[], char c, int p) {
+		return 2;
+	}
+	
+	int y(char a, bool b, int c) {
+		return 5;
+	}
+	
+	void main() char a; {
+		//x = k();
+		a = 'a';
+		if ('c' == 'a' && 3 != 0 || a != b[1] || b == null && y('a', true, 5) > t(c, b[4], 3)) {
+		   c[3] = 2;
+		   //break;
+		} else if (3 != 0) {
+			if (boo[1] <= boo[2]) {
+				d = 2 + k() + c[1];
+			}
+		} else {
+			print('3', 2);
+			read(c[1]);
+			read(boo[1]);
+			do {
+				break;
+			} while (boo != null);
+		}
+	}
+
+}

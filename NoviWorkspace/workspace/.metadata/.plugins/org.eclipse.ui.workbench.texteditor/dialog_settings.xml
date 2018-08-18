@@ -2,27 +2,27 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Designator mora" key="selection"/>
+		<item value="Struct.Arr" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
-			<item value="designator mora"/>
-			<item value="designator"/>
-			<item value="factor nije "/>
-			<item value="factor nije tipa int"/>
-			<item value="call"/>
-			<item value="factor"/>
-			<item value="factor nije"/>
-			<item value="designatorf"/>
-			<item value="FactorDesignatorFuncCall"/>
-			<item value="clear"/>
-			<item value="paramli"/>
-			<item value="kompa"/>
-			<item value="funccal"/>
-			<item value="add"/>
-			<item value="paramlist"/>
+			<item value="struct.arr"/>
+			<item value="DesignatorArray"/>
+			<item value="&quot;null&quot;"/>
+			<item value="designatorAr"/>
+			<item value="paramList.ad"/>
+			<item value="Tipovi nisu kompatibilni"/>
+			<item value="tipovi nisu"/>
+			<item value="prosao"/>
+			<item value="printobj"/>
+			<item value="Designator mora biti tipa "/>
+			<item value="designatora"/>
+			<item value="designatorarra"/>
+			<item value="Designator des"/>
+			<item value="Array"/>
+			<item value="FactorDesignator"/>
 		</list>
 		<list key="replacehistory">
 		</list>

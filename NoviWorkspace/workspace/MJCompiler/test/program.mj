@@ -1,31 +1,50 @@
-program semanticka13
-	int c[], d;
-	char b[];
-	bool boo[];
-	const int x = 3;
+// Test301
+
+program test301
+
+	const int jedan = 1;
+	const int pet = 5;
+
+	int niz[];
+	
+	char nizch[];
 	
 {
-
-	int k() {
-		return 1;
-	}
-	
-	int t(int a[], char c, int p) {
-		return 2;
-	}
-	
-	int y(char a, bool b, int c)int k; {
-		
-		a = 1;
-		return 5; // nadji nacin da resis ovo; moze u runtime-u
-	}
-	int test(int a, int b, int c) int k;
+	void main()	int bodovi;
 	{
-		return 1 + a ;
-	}
 	
-	void main() char a; {
-		d = test(1,2,3);
+		bodovi = 0;
+		bodovi++;
+		bodovi = bodovi + jedan;
+		bodovi = bodovi * pet;
+		bodovi--;
+		print(bodovi); 
+			
+		
+		niz = new int[2];
+		niz[0] = pet;
+		niz[1] = 10;
+		bodovi = niz[1]/niz[0];
+		print(bodovi); 
+		print(niz[1]);
+		
+		nizch = null;
+		nizch = new char[3];
+		nizch[0] = 'a';
+		nizch[jedan] = 'b';
+		nizch[pet - 3] = 'c';
+		print( nizch[2 - 1]);
+		print( nizch[jedan * 2]);
+			
+		
+		bodovi = bodovi + ((pet * jedan - 1) * 2 - (3 % 2 + 3 * 2 - 3) - 1 * 0); 
+		print(bodovi);
+			
+			
+		read(bodovi);
+		bodovi = bodovi + 1;
+		print(bodovi);
 	}
-
 }
+
+
