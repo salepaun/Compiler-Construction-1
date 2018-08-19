@@ -1,0 +1,13 @@
+// Test301
+program test301
+int a;
+int niz[];
+{
+	void main()
+	{
+		niz = new int[3];
+		niz[1] = 1;
+	}
+}
+
+

@@ -340,8 +340,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			return;
 		}
 
-		DesignatorArray.obj = new Obj(Obj.Elem, designator.obj.getName() + "[]",
-				designator.obj.getType().getElemType());
+		DesignatorArray.obj = new Obj(Obj.Elem, designator.obj.getName(), designator.obj.getType().getElemType());
 	}
 
 	@Override
@@ -486,15 +485,17 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			if (cnt < numParams) {
 				formalParams.add(obj.getType());
 				cnt++;
-			}
-			else break;
+			} else
+				break;
 		}
 
 		if (formalParams.size() != paramList.size()) {
 			System.out.println("Liste nisu iste duzine na liniji " + FactorDesignatorFuncCall.getLine());
 		} else {
 			for (int i = 0; i < paramList.size(); i++) {
-				if (!formalParams.get(i).compatibleWith(paramList.get(i))) {
+				if (!formalParams.get(i).compatibleWith(paramList.get(i))
+						&& (formalParams.get(i).getKind() != Struct.Array
+								&& paramList.get(i).getKind() != Struct.Array)) {
 					System.out.println(
 							"Tipovi nisu kompatibilni index " + i + " na liniji " + FactorDesignatorFuncCall.getLine());
 					isCorrect = false;
@@ -515,7 +516,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			FactorDesignator.struct = Tab.nullType;
 			return;
 		}
-		if (designator.obj.getType().getKind() == Struct.Array) {
+		boolean a = (designator instanceof DesignatorArray);
+		if (designator.obj.getType().getKind() == Struct.Array && a) {
 			FactorDesignator.struct = designator.obj.getType().getElemType();
 			return;
 		}
@@ -617,15 +619,17 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			if (cnt < numParams) {
 				formalParams.add(obj.getType());
 				cnt++;
-			}
-			else break;
+			} else
+				break;
 		}
 
 		if (formalParams.size() != paramList.size()) {
 			System.out.println("Liste nisu iste duzine na liniji " + DesignatorFuncCall.getLine());
 		} else {
 			for (int i = 0; i < paramList.size(); i++) {
-				if (!formalParams.get(i).compatibleWith(paramList.get(i))) {
+				if (!formalParams.get(i).compatibleWith(paramList.get(i))
+						&& (formalParams.get(i).getKind() != Struct.Array
+								&& paramList.get(i).getKind() != Struct.Array)) {
 					System.out.println(
 							"Tipovi nisu kompatibilni index " + i + " na liniji " + DesignatorFuncCall.getLine());
 					isCorrect = false;

@@ -19,6 +19,22 @@ public class CodeGenerator extends VisitorAdaptor {
 
 	@Override
 	public void visit(ProgName ProgName) {
+
+		Collection<Obj> universeLocals = Tab.currentScope.getLocals().symbols();
+		for (Obj obj : universeLocals) {
+			if (obj.getKind() == Obj.Meth) {
+
+				obj.setAdr(Code.pc);
+				Code.put(Code.enter);
+				Code.put(obj.getLevel());
+				Code.put(obj.getLocalSymbols().size());
+				Code.put(Code.load_n);
+
+				Code.put(Code.exit);
+				Code.put(Code.return_);
+			}
+		}
+
 		Obj prog = Tab.find(ProgName.getProgName());
 		Tab.openScope();
 		for (Obj obj : prog.getLocalSymbols()) {
@@ -53,7 +69,7 @@ public class CodeGenerator extends VisitorAdaptor {
 		// MethodDecl decl = (MethodDecl) MethodStart.getParent();
 		Code.put(Code.enter);
 		Code.put(currentMethod.getLevel());
-		Code.put(Tab.currentScope.getnVars());
+		Code.put(currentMethod.getLocalSymbols().size());
 	}
 
 	@Override
@@ -86,6 +102,17 @@ public class CodeGenerator extends VisitorAdaptor {
 		if (t == Tab.charType) {
 			Code.put(Code.bprint);
 		}
+	}
+
+	@Override
+	public void visit(Read Read) {
+		Struct type = Read.getDesignator().obj.getType();
+		if (type == Tab.intType) {
+			Code.put(Code.read);
+		} else {
+			Code.put(Code.bread);
+		}
+		Code.store(Read.getDesignator().obj);
 	}
 
 	/*
@@ -137,14 +164,21 @@ public class CodeGenerator extends VisitorAdaptor {
 	}
 
 	@Override
+	public void visit(DesignatorFuncCall DesignatorFuncCall) {
+		Code.put(Code.call);
+		Code.put2(DesignatorFuncCall.getDesignator().obj.getAdr() - Code.pc + 1);
+	}
+
+	@Override
 	public void visit(FactorNew FactorNew) {
 		Struct type = FactorNew.struct;
-		// TODO
 	}
 
 	@Override
 	public void visit(FactorNewArray FactorNewArray) {
-		// TODO
+		Struct type = FactorNewArray.getType().struct;
+		Code.put(Code.newarray);
+		Code.put(type == Tab.intType ? 1 : 0);
 	}
 
 	@Override
@@ -171,7 +205,7 @@ public class CodeGenerator extends VisitorAdaptor {
 			Code.put(Code.sub);
 		}
 	}
-	
+
 	@Override
 	public void visit(TermList TermList) {
 		Mulop mulop = TermList.getMulop();
@@ -183,10 +217,44 @@ public class CodeGenerator extends VisitorAdaptor {
 			Code.put(Code.rem);
 		}
 	}
-	
+
 	@Override
 	public void visit(DesignatorAssigment DesignatorAssigment) {
 		Code.store(DesignatorAssigment.getDesignator().obj);
+	}
+
+	@Override
+	public void visit(ExprNegTerm ExprNegTerm) {
+		Code.put(Code.neg);
+	}
+
+	@Override
+	public void visit(DesignatorInc DesignatorInc) {
+		Code.load(DesignatorInc.getDesignator().obj);
+		Code.loadConst(1);
+		Code.put(Code.add);
+		Code.store(DesignatorInc.getDesignator().obj);
+	}
+
+	@Override
+	public void visit(DesignatorDec DesignatorDec) {
+		Code.load(DesignatorDec.getDesignator().obj);
+		Code.loadConst(1);
+		Code.put(Code.sub);
+		Code.store(DesignatorDec.getDesignator().obj);
+	}
+
+	@Override
+	public void visit(DesignatorArray DesignatorArray) {
+//		Code.load(DesignatorArray.obj);
+
+	}
+
+	@Override
+	public void visit(DesignatorIdent DesignatorIdent) {
+		if (DesignatorIdent.getParent() instanceof DesignatorArray) {
+			Code.load(DesignatorIdent.obj);
+		}
 	}
 
 }

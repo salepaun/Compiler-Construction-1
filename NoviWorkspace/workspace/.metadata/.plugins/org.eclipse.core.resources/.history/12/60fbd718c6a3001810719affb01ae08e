@@ -1,0 +1,13 @@
+// Test301
+program test301
+int a;
+char c;
+{
+	void main() int a;
+	{
+		read(c);
+		print(c);
+	}
+}
+
+

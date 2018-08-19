@@ -1,0 +1,21 @@
+// Test301
+program test301
+int a;
+char c;
+{
+
+	void k(int a1) int a2;
+	{
+		a2 = 2;
+		print(a1);
+		print(a2);
+	}
+
+	void main() int a;
+	{
+		c = chr(50);
+		print(c);
+	}
+}
+
+

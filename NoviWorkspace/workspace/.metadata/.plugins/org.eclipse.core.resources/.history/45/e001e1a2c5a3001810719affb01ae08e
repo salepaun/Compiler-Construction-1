@@ -1,0 +1,23 @@
+// Test301
+program test301
+const int a = 1;
+{
+
+	int k()
+	{
+		return 1+2+3;
+	}
+	
+	void a1(int q, char c)
+	{
+		print(q);
+		print(c);
+	}
+
+	void main() int a;
+	{
+		a1(19, 'k');
+	}
+}
+
+

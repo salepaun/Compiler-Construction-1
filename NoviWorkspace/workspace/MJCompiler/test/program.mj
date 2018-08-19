@@ -1,19 +1,11 @@
 // Test301
 program test301
-const int a = 1;
+int niz[];
+int k;
 {
-
-	int k()
+	void main()
 	{
-		return 1+2+3;
-	}
-
-	void main() int a;
-	{
-		a = 15;
-		print(a%2);
-		print(5+7+a/3);
-		print(k()+4 * 4);
+		niz[1] = 1;
 	}
 }
 
