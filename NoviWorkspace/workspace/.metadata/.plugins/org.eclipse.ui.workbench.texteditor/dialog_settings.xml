@@ -2,27 +2,27 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="Struct.Arr" key="selection"/>
+		<item value="Add" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="add"/>
+			<item value="localsymbols"/>
+			<item value="[]"/>
+			<item value="Obj []"/>
+			<item value="Obj"/>
+			<item value="Obj[]"/>
+			<item value="printexpronly moze"/>
+			<item value="ExprNegTerm"/>
+			<item value="termfact"/>
+			<item value="constas"/>
+			<item value="constdecl"/>
+			<item value="constva"/>
+			<item value="factorco"/>
 			<item value="struct.arr"/>
 			<item value="DesignatorArray"/>
-			<item value="&quot;null&quot;"/>
-			<item value="designatorAr"/>
-			<item value="paramList.ad"/>
-			<item value="Tipovi nisu kompatibilni"/>
-			<item value="tipovi nisu"/>
-			<item value="prosao"/>
-			<item value="printobj"/>
-			<item value="Designator mora biti tipa "/>
-			<item value="designatora"/>
-			<item value="designatorarra"/>
-			<item value="Designator des"/>
-			<item value="Array"/>
-			<item value="FactorDesignator"/>
 		</list>
 		<list key="replacehistory">
 		</list>

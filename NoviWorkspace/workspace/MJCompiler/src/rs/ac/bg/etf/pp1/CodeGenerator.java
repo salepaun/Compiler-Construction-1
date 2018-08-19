@@ -1,103 +1,192 @@
 package rs.ac.bg.etf.pp1;
 
-import rs.etf.pp1.mj.runtime.Code;
-import rs.etf.pp1.symboltable.concepts.Obj;
+import java.util.Collection;
 
-public class CodeGenerator /*extends VisitorAdaptor*/ {
-/*	
-	private int varCount;
-	
-	private int paramCnt;
-	
-	private int mainPc;
-	
-	public int getMainPc() {
-		return mainPc;
-	}
-	
+import rs.ac.bg.etf.pp1.ast.*;
+import rs.etf.pp1.mj.runtime.*;
+import rs.etf.pp1.symboltable.Tab;
+import rs.etf.pp1.symboltable.concepts.*;
+
+public class CodeGenerator extends VisitorAdaptor {
+
+	public Obj currentMethod = null;
+	public Struct currentType = null;
+
 	@Override
-	public void visit(MethodTypeName MethodTypeName) {
-		if ("main".equalsIgnoreCase(MethodTypeName.getMethName())) {
-			mainPc = Code.pc;
+	public void visit(Program Program) {
+		Tab.closeScope();
+	}
+
+	@Override
+	public void visit(ProgName ProgName) {
+		Obj prog = Tab.find(ProgName.getProgName());
+		Tab.openScope();
+		for (Obj obj : prog.getLocalSymbols()) {
+			if (obj.getKind() == Obj.Var) {
+				Code.dataSize++;
+			}
+			Tab.currentScope.addToLocals(obj);
 		}
-		MethodTypeName.obj.setAdr(Code.pc);
-		
-		// Collect arguments and local variables.
-		SyntaxNode methodNode = MethodTypeName.getParent();
-		VarCounter varCnt = new VarCounter();
-		methodNode.traverseTopDown(varCnt);
-		FormParamCounter fpCnt = new FormParamCounter();
-		methodNode.traverseTopDown(fpCnt);
-		
-		// Generate the entry.
-		Code.put(Code.enter);
-		Code.put(fpCnt.getCount());
-		Code.put(varCnt.getCount() + fpCnt.getCount());
-	}
-	
-	@Override
-	public void visit(VarDecl VarDecl) {
-		varCount++;
 	}
 
-	@Override
-	public void visit(FormalParamDecl FormalParam) {
-		paramCnt++;
-	}	
-	
 	@Override
 	public void visit(MethodDecl MethodDecl) {
+		currentMethod = null;
+		Code.put(Code.exit);
+		Code.put(Code.return_);
+		Tab.closeScope();
+	}
+
+	@Override
+	public void visit(MethodName MethodName) {
+		currentMethod = Tab.find(MethodName.getMethName());
+		Tab.openScope();
+	}
+
+	@Override
+	public void visit(MethodStart MethodStart) {
+		currentMethod.setAdr(Code.pc);
+		if ("main".equals(currentMethod.getName())) {
+			Code.mainPc = Code.pc;
+		}
+
+		// MethodDecl decl = (MethodDecl) MethodStart.getParent();
+		Code.put(Code.enter);
+		Code.put(currentMethod.getLevel());
+		Code.put(Tab.currentScope.getnVars());
+	}
+
+	@Override
+	public void visit(PrintExprOnly PrintExprOnly) {
+		Struct t = PrintExprOnly.getExpr().struct;
+		if (t != Tab.intType && t != Tab.charType && t != SemanticAnalyzer.boolType)
+			System.out.println("Semanticka greska na liniji " + PrintExprOnly.getLine()
+					+ ": Operand instrukcije PRINT mora biti char, int ili bool tipa");
+		if (t == Tab.intType || t == SemanticAnalyzer.boolType) {
+			Code.loadConst(10);
+			Code.put(Code.print);
+		}
+		if (t == Tab.charType) {
+			Code.loadConst(1);
+			Code.put(Code.bprint);
+		}
+	}
+
+	@Override
+	public void visit(PrintExprWithNumber PrintExprWithNumber) {
+		Struct t = PrintExprWithNumber.getExpr().struct;
+		int num = PrintExprWithNumber.getNum().intValue();
+		Code.loadConst(num);
+		if (t != Tab.intType && t != Tab.charType && t != SemanticAnalyzer.boolType)
+			System.out.println("Semanticka greska na liniji " + PrintExprWithNumber.getLine()
+					+ ": Operand instrukcije PRINT mora biti char, int ili bool tipa");
+		if (t == Tab.intType || t == SemanticAnalyzer.boolType) {
+			Code.put(Code.print);
+		}
+		if (t == Tab.charType) {
+			Code.put(Code.bprint);
+		}
+	}
+
+	/*
+	 * @Override public void visit(ConstValue ConstValue) { if (ConstValue
+	 * instanceof NumConst) { NumConst num = (NumConst) ConstValue; Code.load(new
+	 * Obj(Obj.Con, "", Tab.intType, num.getNumValue().intValue(), 0)); } else if
+	 * (ConstValue instanceof CharConst) { CharConst chr = (CharConst) ConstValue;
+	 * Code.load(new Obj(Obj.Con, "", Tab.charType, chr.getCharValue().charValue(),
+	 * 0)); } else if (ConstValue instanceof BoolConst) { BoolConst bool =
+	 * (BoolConst) ConstValue; Code.load(new Obj(Obj.Con, "",
+	 * SemanticAnalyzer.boolType, bool.getBoolValue().booleanValue() ? 1 : 0, 0)); }
+	 * }
+	 */
+
+	@Override
+	public void visit(ConstAssigment ConstAssigment) {
+		String name = ConstAssigment.getVarName();
+		Obj obj = Tab.find(name);
+		Struct type = obj.getType();
+		ConstValue value = ConstAssigment.getConstValue();
+
+		if (value instanceof NumConst) {
+			int num = ((NumConst) value).getNumValue().intValue();
+			obj.setAdr(num);
+		} else if (value instanceof CharConst) {
+			char chr = ((CharConst) value).getCharValue().charValue();
+			obj.setAdr(chr);
+		} else if (value instanceof BoolConst) {
+			boolean bool = ((BoolConst) value).getBoolValue().booleanValue();
+			obj.setAdr(bool ? 1 : 0);
+		}
+	}
+
+	@Override
+	public void visit(ReturnVoid ReturnVoid) {
 		Code.put(Code.exit);
 		Code.put(Code.return_);
 	}
-	
+
 	@Override
-	public void visit(ReturnExpr ReturnExpr) {
-		Code.put(Code.exit);
-		Code.put(Code.return_);
+	public void visit(FactorDesignator FactorDesignator) {
+		Code.load(FactorDesignator.getDesignator().obj);
 	}
-	
+
 	@Override
-	public void visit(ReturnNoExpr ReturnNoExpr) {
-		Code.put(Code.exit);
-		Code.put(Code.return_);
+	public void visit(FactorDesignatorFuncCall FactorDesignatorFuncCall) {
+		Code.put(Code.call);
+		Code.put2(FactorDesignatorFuncCall.getDesignator().obj.getAdr() - Code.pc + 1);
 	}
-	
+
 	@Override
-	public void visit(Assignment Assignment) {
-		Code.store(Assignment.getDesignator().obj);
+	public void visit(FactorNew FactorNew) {
+		Struct type = FactorNew.struct;
+		// TODO
 	}
-	
+
 	@Override
-	public void visit(Const Const) {
-		Code.load(new Obj(Obj.Con, "$", Const.struct, Const.getN1(), 0));
+	public void visit(FactorNewArray FactorNewArray) {
+		// TODO
 	}
-	
+
 	@Override
-	public void visit(Designator Designator) {
-		SyntaxNode parent = Designator.getParent();
-		if (Assignment.class != parent.getClass() && FuncCall.class != parent.getClass()) {
-			Code.load(Designator.obj);
+	public void visit(FactorConstValue FactorConstValue) {
+		ConstValue ConstValue = FactorConstValue.getConstValue();
+		if (ConstValue instanceof NumConst) {
+			NumConst num = (NumConst) ConstValue;
+			Code.load(new Obj(Obj.Con, "", Tab.intType, num.getNumValue().intValue(), 0));
+		} else if (ConstValue instanceof CharConst) {
+			CharConst chr = (CharConst) ConstValue;
+			Code.load(new Obj(Obj.Con, "", Tab.charType, chr.getCharValue().charValue(), 0));
+		} else if (ConstValue instanceof BoolConst) {
+			BoolConst bool = (BoolConst) ConstValue;
+			Code.load(new Obj(Obj.Con, "", SemanticAnalyzer.boolType, bool.getBoolValue().booleanValue() ? 1 : 0, 0));
+		}
+	}
+
+	@Override
+	public void visit(ExprList ExprList) {
+		Addop addop = ExprList.getAddop();
+		if (addop instanceof AddopPlus) {
+			Code.put(Code.add);
+		} else if (addop instanceof AddopMinus) {
+			Code.put(Code.sub);
 		}
 	}
 	
 	@Override
-	public void visit(FuncCall FuncCall) {
-		Obj functionObj = FuncCall.getDesignator().obj;
-		int offset = functionObj.getAdr() - Code.pc; 
-		Code.put(Code.call);
-		Code.put2(offset);
+	public void visit(TermList TermList) {
+		Mulop mulop = TermList.getMulop();
+		if (mulop instanceof MulopMul) {
+			Code.put(Code.mul);
+		} else if (mulop instanceof MulopDiv) {
+			Code.put(Code.div);
+		} else if (mulop instanceof MulopMod) {
+			Code.put(Code.rem);
+		}
 	}
 	
 	@Override
-	public void visit(PrintStmt PrintStmt) {
-		Code.put(Code.const_5);
-		Code.put(Code.print);
+	public void visit(DesignatorAssigment DesignatorAssigment) {
+		Code.store(DesignatorAssigment.getDesignator().obj);
 	}
-	
-	@Override
-	public void visit(AddExpr AddExpr) {
-		Code.put(Code.add);
-	}
-	*/
+
 }

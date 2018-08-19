@@ -96,6 +96,7 @@ non terminal ArrayBrackets ArrayBrackets;
 non terminal MethodDeclList MethodDeclList;
 nonterminal MethodDecl MethodDecl;
 nonterminal MethodName MethodName;
+nonterminal MethodStart MethodStart;
 non terminal ConstDecl ConstDecl;
 nonterminal ConstAssigment ConstAssigment;
 nonterminal ConstAssigmentList ConstAssigmentList;
@@ -200,9 +201,11 @@ MethodDeclList ::=  (MethodDeclsList) MethodDeclList:M1 MethodDecl:M2 {: RESULT=
 					/* epsilon */
 					;
 
-MethodDecl ::= (MethodDecl) MethType:retType MethodName:methodName LPAREN FormPars:F1 RPAREN VarDeclList:V2 LBRACE StatementList:S3 RBRACE {: RESULT=new MethodDecl(retType, methodName, F1, V2, S3); RESULT.setLine(retTypeleft); :};
+MethodDecl ::= (MethodDecl) MethType:retType MethodName:methodName LPAREN FormPars:F1 RPAREN VarDeclList:V2 LBRACE MethodStart:M3 StatementList:S4 RBRACE {: RESULT=new MethodDecl(retType, methodName, F1, V2, M3, S4); RESULT.setLine(retTypeleft); :};
 
 MethodName ::= (MethodName) IDENT:methName {: RESULT=new MethodName(methName); RESULT.setLine(methNameleft); :};
+
+MethodStart ::= (MethodStart) {: RESULT=new MethodStart(); :} /* epsilon */;
 
 MethType ::= (MethTypeNotVoid) Type:type {: RESULT=new MethTypeNotVoid(type); RESULT.setLine(typeleft); :}
 			 |
@@ -250,7 +253,7 @@ Statement ::= (DesignatorSingleStatement) DesignatorStatement:D1 SEMI {: RESULT=
 			  |
 			  (PrintExprOnly) PRINT LPAREN Expr:expr RPAREN SEMI {: RESULT=new PrintExprOnly(expr); RESULT.setLine(exprleft); :} 
 			  |
-			  (PrintExprWithNumber) PRINT LPAREN Expr:expr COMMA NUM_CONST:N1 RPAREN SEMI {: RESULT=new PrintExprWithNumber(expr, N1); RESULT.setLine(exprleft); :} 
+			  (PrintExprWithNumber) PRINT LPAREN Expr:expr COMMA NUM_CONST:num RPAREN SEMI {: RESULT=new PrintExprWithNumber(expr, num); RESULT.setLine(exprleft); :} 
 			  |
 			  (BraceStatementList) LBRACE StatementList:S1 RBRACE {: RESULT=new BraceStatementList(S1); RESULT.setLine(S1left); :}
 			  ;

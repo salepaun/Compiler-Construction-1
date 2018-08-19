@@ -3,6 +3,7 @@ package rs.ac.bg.etf.pp1;
 import java.util.*;
 
 import rs.ac.bg.etf.pp1.ast.*;
+import rs.etf.pp1.mj.runtime.Code;
 import rs.etf.pp1.symboltable.Tab;
 import rs.etf.pp1.symboltable.concepts.Obj;
 import rs.etf.pp1.symboltable.concepts.Struct;
@@ -10,8 +11,6 @@ import rs.etf.pp1.symboltable.concepts.Struct;
 public class SemanticAnalyzer extends VisitorAdaptor {
 
 	public static final Struct boolType = new Struct(Struct.Bool);
-	public static final int ARG = 10;
-	public static final int ARRAYACCESS = 11;
 	public Type currentType = null;
 	public Obj currentClass = null;
 	public Obj currentMethod = null;
@@ -95,6 +94,17 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	public void visit(Addop Addop) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void visit(PrintExprOnly PrintExprOnly) {
+		Expr expr = PrintExprOnly.getExpr();
+		if (expr.struct != Tab.intType && expr.struct != Tab.charType && expr.struct != boolType) {
+			System.out.println("PrintExprOnly moze da ispise samo int ili char a ne " + expr.struct.getKind()
+					+ " na liniji " + PrintExprOnly.getLine());
+			isCorrect = false;
+			return;
+		}
 	}
 
 	@Override
@@ -451,6 +461,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			isCorrect = false;
 			return;
 		}
+
 	}
 
 	@Override
@@ -466,13 +477,17 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 
 		List<Struct> formalParams = new ArrayList<>();
 		Collection<Obj> localSymbols = designator.obj.getLocalSymbols();
-		for (Obj symbol : localSymbols) {
-			if (symbol.getKind() == ARG) {
-				// System.out.println("Argument " + symbol.getName() + " " +
-				// StructToString(symbol.getType())
-				// + " na liniji " + FactorDesignatorFuncCall.getLine());
-				formalParams.add(symbol.getType());
+		int numParams = designator.obj.getLevel();
+//		for(int i = 0; i < numParams;i++) {
+//			formalParams.add(localSymbols[i].getType());
+//		}
+		int cnt = 0;
+		for (Obj obj : localSymbols) {
+			if (cnt < numParams) {
+				formalParams.add(obj.getType());
+				cnt++;
 			}
+			else break;
 		}
 
 		if (formalParams.size() != paramList.size()) {
@@ -480,20 +495,22 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		} else {
 			for (int i = 0; i < paramList.size(); i++) {
 				if (!formalParams.get(i).compatibleWith(paramList.get(i))) {
-					System.out.println("Tipovi nisu kompatibilni index " + i + " na liniji " + FactorDesignatorFuncCall.getLine());
+					System.out.println(
+							"Tipovi nisu kompatibilni index " + i + " na liniji " + FactorDesignatorFuncCall.getLine());
 					isCorrect = false;
 				}
 			}
 		}
 
 		paramList.clear();
-		System.out.println("Prosao poziv funkcije " + designator.obj.getName() + " na liniji " + FactorDesignatorFuncCall.getLine());
+		System.out.println("Prosao poziv funkcije " + designator.obj.getName() + " na liniji "
+				+ FactorDesignatorFuncCall.getLine());
 	}
 
 	@Override
 	public void visit(FactorDesignator FactorDesignator) {
 		Designator designator = FactorDesignator.getDesignator();
-		//printObj(designator.obj);
+		// printObj(designator.obj);
 		if (designator.obj.getName().equals("null")) {
 			FactorDesignator.struct = Tab.nullType;
 			return;
@@ -591,12 +608,17 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		}
 		List<Struct> formalParams = new ArrayList<>();
 		Collection<Obj> localSymbols = designator.obj.getLocalSymbols();
-		for (Obj symbol : localSymbols) {
-			if (symbol.getKind() == ARG) {
-				System.out.println("Argument " + symbol.getName() + " " + StructToString(symbol.getType())
-						+ " na liniji " + DesignatorFuncCall.getLine());
-				formalParams.add(symbol.getType());
+		int numParams = designator.obj.getLevel();
+//		for(int i = 0; i < numParams;i++) {
+//			formalParams.add(localSymbols[i].getType());
+//		}
+		int cnt = 0;
+		for (Obj obj : localSymbols) {
+			if (cnt < numParams) {
+				formalParams.add(obj.getType());
+				cnt++;
 			}
+			else break;
 		}
 
 		if (formalParams.size() != paramList.size()) {
@@ -604,7 +626,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		} else {
 			for (int i = 0; i < paramList.size(); i++) {
 				if (!formalParams.get(i).compatibleWith(paramList.get(i))) {
-					System.out.println("Tipovi nisu kompatibilni index " + i + " na liniji " +DesignatorFuncCall.getLine());
+					System.out.println(
+							"Tipovi nisu kompatibilni index " + i + " na liniji " + DesignatorFuncCall.getLine());
 					isCorrect = false;
 				}
 			}
@@ -662,9 +685,10 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			argType = new Struct(Struct.Array, type.struct);
 		}
 
-		Tab.insert(ARG, name, argType);
+		Tab.insert(Obj.Var, name, argType);
 		System.out.println("Formalni parametar metode " + currentMethod.getName() + ": " + name + " "
 				+ type.getTypeName() + (isArray ? "[]" : "") + " na liniji " + FormalParamDecl.getLine());
+		currentMethod.setLevel(currentMethod.getLevel() + 1);
 	}
 
 	@Override
@@ -704,6 +728,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 				+ MethTypeNotVoid.getLine());
 	}
 
+	// TODO promeniti
 	@Override
 	public void visit(MethodDecl MethodDecl) {
 		if (currentMethod == null) {
@@ -872,7 +897,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 				return;
 			}
 
-			if (currentType.struct.getKind() != type.getKind()) {
+			if (!type.assignableTo(currentType.struct)) {
 				System.out.println("const tipovi se ne slazu");
 				isCorrect = false;
 				return;

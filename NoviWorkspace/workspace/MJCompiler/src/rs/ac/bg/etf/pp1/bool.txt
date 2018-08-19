@@ -40,9 +40,8 @@ public class BoolConst extends ConstValue {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
         buffer.append("BoolConst(\n");
-
+        buffer.append(boolValue);
         buffer.append("\n");
-
         buffer.append(tab);
         buffer.append(") [BoolConst]");
         return buffer.toString();

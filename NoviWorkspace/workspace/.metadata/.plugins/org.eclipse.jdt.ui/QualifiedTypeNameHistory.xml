@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-<fullyQualifiedTypeName name="rs.etf.pp1.mj.runtime.Code"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.MethodTypeName"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.VarDeclList"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.FormalParamList"/>
@@ -18,7 +17,6 @@
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.VarDecl"/>
 <fullyQualifiedTypeName name="java.io.BufferedReader"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.MulopDiv"/>
-<fullyQualifiedTypeName name="java.lang.System"/>
 <fullyQualifiedTypeName name="org.apache.log4j.Logger"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.SyntaxNode"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Program"/>
@@ -28,25 +26,33 @@
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.MethTypeVoid"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.ReturnVoid"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Return"/>
-<fullyQualifiedTypeName name="rs.etf.pp1.symboltable.Tab"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.TermList"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Factor"/>
-<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.ConstValue"/>
-<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.CharConst"/>
-<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.NumConst"/>
-<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.BoolConst"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Term"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Type"/>
 <fullyQualifiedTypeName name="java.util.HashMap"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.TermFactor"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Designator"/>
-<fullyQualifiedTypeName name="java.util.Collection"/>
 <fullyQualifiedTypeName name="java.util.LinkedList"/>
 <fullyQualifiedTypeName name="java.lang.String"/>
 <fullyQualifiedTypeName name="com.sun.org.apache.regexp.internal.recompile"/>
-<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.SemanticAnalyzer.ScopeEnum"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Expr"/>
-<fullyQualifiedTypeName name="rs.etf.pp1.symboltable.concepts.Struct"/>
 <fullyQualifiedTypeName name="rs.etf.pp1.symboltable.concepts.Obj"/>
 <fullyQualifiedTypeName name="java.util.List"/>
+<fullyQualifiedTypeName name="rs.etf.pp1.symboltable.Tab"/>
+<fullyQualifiedTypeName name="java.lang.System"/>
+<fullyQualifiedTypeName name="rs.etf.pp1.symboltable.concepts.Struct"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.ConstValue"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.CharConst"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.SemanticAnalyzer"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.SemanticAnalyzer.ScopeEnum"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.BoolConst"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.NumConst"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.ArrayBracket"/>
+<fullyQualifiedTypeName name="rs.etf.pp1.mj.runtime.Code"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Addop"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.AddopPlus"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.AddopMinus"/>
+<fullyQualifiedTypeName name="java.util.Collection"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Mulop"/>
 </qualifiedTypeNameHistroy>
