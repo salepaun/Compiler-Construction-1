@@ -79,24 +79,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	@Override
-	public void visit(Mulop Mulop) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(Relop Relop) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(Addop Addop) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void visit(PrintExprOnly PrintExprOnly) {
 		Expr expr = PrintExprOnly.getExpr();
 		if (expr.struct != Tab.intType && expr.struct != Tab.charType && expr.struct != boolType) {
@@ -105,18 +87,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			isCorrect = false;
 			return;
 		}
-	}
-
-	@Override
-	public void visit(Factor Factor) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(CondTerm CondTerm) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -143,144 +113,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			 */
 			termFactor.struct = termFactor.getFactor().struct;
 		}
-	}
-
-	@Override
-	public void visit(Condition Condition) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(ConstValue ConstValue) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(ExtendsDecl ExtendsDecl) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(ActualParamList ActualParamList) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(VarDeclList VarDeclList) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(FormalParamList FormalParamList) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(DesignatorStatement DesignatorStatement) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(ActualPars ActualPars) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(Statement Statement) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(CondFact CondFact) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(MethodDeclList MethodDeclList) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(FormPars FormPars) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(MulopMod MulopMod) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(MulopDiv MulopDiv) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(MulopMul MulopMul) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(AddopMinus AddopMinus) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(AddopPlus AddopPlus) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(RelopLessOrEqual RelopLessOrEqual) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(RelopLess RelopLess) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(RelopGreaterOrEqual RelopGreaterOrEqual) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(RelopGreater RelopGreater) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(RelopNotEqual RelopNotEqual) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(RelopIsEqual RelopIsEqual) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -360,43 +192,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		}
 		DesignatorIdent.obj = obj;
 	}
-
-	@Override
-	public void visit(CondFactExpr CondFactExpr) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(CondFactRelopList CondFactRelopList) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(CondTermCondFact CondTermCondFact) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(CondTermAndList CondTermAndList) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(ConditionCondTerm ConditionCondTerm) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(ConditionOrList ConditionOrList) {
-		// TODO Auto-generated method stub
-
-	}
-
+	
 	@Override
 	public void visit(ActualParamsListExpr ActualParamsListExpr) {
 		Expr expr = ActualParamsListExpr.getExpr();
@@ -410,25 +206,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	@Override
-	public void visit(NoActualParsList NoActualParsList) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(ActualParsList ActualParsList) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void visit(FactorExpr FactorExpr) {
 		FactorExpr.struct = FactorExpr.getExpr().struct;
-	}
-
-	@Override
-	public void visit(FactorNew FactorNew) {
-
 	}
 
 	@Override
@@ -589,18 +368,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	@Override
-	public void visit(DesignatorDec DesignatorDec) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(DesignatorInc DesignatorInc) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void visit(DesignatorFuncCall DesignatorFuncCall) {
 		Designator designator = DesignatorFuncCall.getDesignator();
 		if (designator.obj.getKind() != Obj.Meth) {
@@ -656,30 +423,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	}
 
 	@Override
-	public void visit(BraceStatementList BraceStatementList) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(DesignatorSingleStatement DesignatorSingleStatement) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(NoStatementsList NoStatementsList) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void visit(StatementsList StatementsList) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void visit(FormalParamDecl FormalParamDecl) {
 		Type type = FormalParamDecl.getType();
 		String name = FormalParamDecl.getName();
@@ -693,16 +436,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		System.out.println("Formalni parametar metode " + currentMethod.getName() + ": " + name + " "
 				+ type.getTypeName() + (isArray ? "[]" : "") + " na liniji " + FormalParamDecl.getLine());
 		currentMethod.setLevel(currentMethod.getLevel() + 1);
-	}
-
-	@Override
-	public void visit(FormalParamSingleDecl FormalParamSingleDecl) {
-	}
-
-	@Override
-	public void visit(FormalParamsList FormalParamsList) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

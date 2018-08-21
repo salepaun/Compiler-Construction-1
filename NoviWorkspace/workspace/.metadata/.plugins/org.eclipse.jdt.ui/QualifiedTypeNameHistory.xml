@@ -55,4 +55,5 @@
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.AddopMinus"/>
 <fullyQualifiedTypeName name="java.util.Collection"/>
 <fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.Mulop"/>
+<fullyQualifiedTypeName name="rs.ac.bg.etf.pp1.ast.DesignatorArray"/>
 </qualifiedTypeNameHistroy>

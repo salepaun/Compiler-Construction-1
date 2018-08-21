@@ -1,9 +1,0 @@
-program semanticka13
-	int c[];	
-{
-	void main(){
-		c[1] = 1;
-		print(c[2]);
-	}
-
-}

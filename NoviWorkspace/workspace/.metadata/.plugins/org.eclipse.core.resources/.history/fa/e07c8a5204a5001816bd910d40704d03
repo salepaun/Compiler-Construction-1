@@ -32,8 +32,8 @@ public class Compiler {
 
 		try {
 			File source = new File("test/program.mj");
-//			 if(source.exists())source.delete();
-//			 source.createNewFile();
+			 //if(source.exists())source.delete();
+			 //source.createNewFile();
 			log.info("Compiling source file :" + source.getAbsolutePath());
 
 			bufferReader = new BufferedReader(new FileReader(source));

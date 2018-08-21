@@ -238,7 +238,7 @@ public class CodeGenerator extends VisitorAdaptor {
 
 	@Override
 	public void visit(DesignatorInc DesignatorInc) {
-		if (DesignatorInc.getDesignator() instanceof DesignatorArray)
+		if (DesignatorDec.getDesignator() instanceof DesignatorArray)
 			Code.put(Code.dup2);
 		Code.load(DesignatorInc.getDesignator().obj);
 		Code.loadConst(1);

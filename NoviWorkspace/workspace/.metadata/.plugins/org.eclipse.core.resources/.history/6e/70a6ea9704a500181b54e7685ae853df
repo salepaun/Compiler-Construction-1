@@ -33,7 +33,7 @@ public class CodeGenerator extends VisitorAdaptor {
 				if ("len".equals(obj.getName())) {
 					Code.put(Code.arraylength);
 				}
-
+				
 				Code.put(Code.exit);
 				Code.put(Code.return_);
 			}
@@ -224,10 +224,9 @@ public class CodeGenerator extends VisitorAdaptor {
 
 	@Override
 	public void visit(DesignatorAssigment DesignatorAssigment) {
-		/*
-		 * if(DesignatorAssigment.getDesignator() instanceof DesignatorArray) {
-		 * Code.put(Code.dup2); }
-		 */
+		/*if(DesignatorAssigment.getDesignator() instanceof DesignatorArray) {
+			Code.put(Code.dup2);
+		}*/
 		Code.store(DesignatorAssigment.getDesignator().obj);
 	}
 
@@ -238,8 +237,7 @@ public class CodeGenerator extends VisitorAdaptor {
 
 	@Override
 	public void visit(DesignatorInc DesignatorInc) {
-		if (DesignatorInc.getDesignator() instanceof DesignatorArray)
-			Code.put(Code.dup2);
+		Code.put(Code.dup2);
 		Code.load(DesignatorInc.getDesignator().obj);
 		Code.loadConst(1);
 		Code.put(Code.add);
@@ -248,8 +246,8 @@ public class CodeGenerator extends VisitorAdaptor {
 
 	@Override
 	public void visit(DesignatorDec DesignatorDec) {
-		if (DesignatorDec.getDesignator() instanceof DesignatorArray)
-			Code.put(Code.dup2);
+//		if(DesignatorDec)
+		Code.put(Code.dup2);
 		Code.load(DesignatorDec.getDesignator().obj);
 		Code.loadConst(1);
 		Code.put(Code.sub);
